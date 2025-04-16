@@ -23,15 +23,12 @@ jobs:
         env:
           COMPOSER_DISABLE_SECURITY_WARNINGS: 1
         run: composer install --no-interaction --no-scripts --prefer-dist
-        working-directory: management
 
       - name: Build Test
         run: npm install && npm run build
-        working-directory: management
 
       - name: Run Pint
         run: vendor/bin/pint
-        working-directory: management
 
       - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
