@@ -21,7 +21,7 @@ class AdminMiddleware
                 return response()->json(['message' => 'Geen toegang tot deze pagina.'], 403);
             }
 
-            return redirect('/')->with('error', 'Je hebt geen toegang tot het admin gedeelte.');
+            return redirect('/dashboard')->with('error', 'Je hebt geen toegang tot het admin gedeelte.');
         }
 
         return $next($request);

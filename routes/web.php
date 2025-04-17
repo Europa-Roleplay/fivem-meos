@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\BoeteController;
+use App\Http\Controllers\Admin\LogboekController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\DashboardController;
@@ -41,6 +43,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         Route::controller(LogboekController::class)->name('.logboek')->prefix('logboek')->group(function () {
             Route::get('/', 'index');
+            Route::get('/export', 'export')->name('.export');
+        });
+
+        Route::controller(BoeteController::class)->name('.boetes')->prefix('boetes')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/create', 'create')->name('.create');
+            Route::post('/', 'store')->name('.store');
+            Route::get('/{boete}/edit', 'edit')->name('.edit');
+            Route::put('/{boete}', 'update')->name('.update');
+            Route::delete('/{boete}', 'destroy')->name('.destroy');
             Route::get('/export', 'export')->name('.export');
         });
 

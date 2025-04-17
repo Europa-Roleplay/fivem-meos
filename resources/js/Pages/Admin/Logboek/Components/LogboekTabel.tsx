@@ -3,13 +3,14 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/ui/table"
 import { Button } from "@/Components/ui/button"
 import { Badge } from "@/Components/ui/badge"
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ChevronsLeft, ChevronsRight, Info } from "lucide-react"
+import { ChevronDown, ChevronUp, Info } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 import { nl } from "date-fns/locale"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/Components/ui/dialog"
 import { ScrollArea } from "@/Components/ui/scroll-area"
-import { router, usePage } from "@inertiajs/react"
+import { router } from "@inertiajs/react"
 import { useState } from "react"
+import Paginator from "@/assets/Paginator"
 import type { LogboekPagination } from "../types"
 
 interface LogboekTabelProps {
@@ -20,13 +21,12 @@ type SortField = "created_at" | "gebruiker" | "actie_type" | "beschrijving"
 type SortDirection = "asc" | "desc"
 
 export default function LogboekTabel({ logboek }: LogboekTabelProps) {
-  const { route } = usePage().props as { route: (name: string, params?: Record<string, any>) => string }
   const [sortField, setSortField] = useState<SortField>("created_at")
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc")
 
   const getBadgeVariant = (
     type: string,
-  ): "default" | "success" | "warning" | "destructive" | "outline" | "secondary" => {
+  ): "default" | "secondary" | "destructive" | "outline" | "success" | "warning" => {
     switch (type) {
       case "login":
         return "default"
@@ -60,34 +60,18 @@ export default function LogboekTabel({ logboek }: LogboekTabelProps) {
     }
   }
 
-  const handlePageChange = (page: number) => {
-    router.get(
-      route("admin.logboek.index", {
-        page,
-        sort_field: sortField,
-        sort_direction: sortDirection,
-      }),
-      {},
-      {
-        preserveState: true,
-        replace: true,
-        only: ["logboek"],
-      },
-    )
-  }
-
   const handleSort = (field: SortField) => {
     const newDirection = field === sortField && sortDirection === "asc" ? "desc" : "asc"
     setSortField(field)
     setSortDirection(newDirection)
 
     router.get(
-      route("admin.logboek.index", {
+      "/admin/logboek",
+      {
         sort_field: field,
         sort_direction: newDirection,
         page: logboek.current_page,
-      }),
-      {},
+      },
       {
         preserveState: true,
         replace: true,
@@ -211,48 +195,7 @@ export default function LogboekTabel({ logboek }: LogboekTabelProps) {
         <div className="text-sm text-zinc-400">
           Pagina {logboek.current_page} van {logboek.last_page} ({logboek.total} items)
         </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(1)}
-            disabled={logboek.current_page === 1}
-            className="border-zinc-700 bg-zinc-800 hover:bg-zinc-700"
-          >
-            <ChevronsLeft className="h-4 w-4" />
-            <span className="sr-only">Eerste pagina</span>
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(logboek.current_page - 1)}
-            disabled={logboek.current_page === 1}
-            className="border-zinc-700 bg-zinc-800 hover:bg-zinc-700"
-          >
-            <ChevronLeft className="h-4 w-4" />
-            <span className="sr-only">Vorige pagina</span>
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(logboek.current_page + 1)}
-            disabled={logboek.current_page === logboek.last_page}
-            className="border-zinc-700 bg-zinc-800 hover:bg-zinc-700"
-          >
-            <ChevronRight className="h-4 w-4" />
-            <span className="sr-only">Volgende pagina</span>
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => handlePageChange(logboek.last_page)}
-            disabled={logboek.current_page === logboek.last_page}
-            className="border-zinc-700 bg-zinc-800 hover:bg-zinc-700"
-          >
-            <ChevronsRight className="h-4 w-4" />
-            <span className="sr-only">Laatste pagina</span>
-          </Button>
-        </div>
+        <Paginator data={logboek} />
       </div>
     </div>
   )

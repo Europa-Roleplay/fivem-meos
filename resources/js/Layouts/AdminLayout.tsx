@@ -87,7 +87,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
                             expanded={sidebarOpen}
                         />
                         <NavItem
-                            href="/boetes"
+                            href={route("admin.boetes")}
                             icon={<CreditCard />}
                             label="Boetes"
                             active={pathname?.startsWith("/boetes")}
@@ -139,21 +139,30 @@ export default function AdminLayout({ children }: PropsWithChildren) {
                                 align="end"
                                 className="bg-zinc-900 border-zinc-800"
                             >
-                                <DropdownMenuLabel>
+                                <DropdownMenuLabel className="text-white">
                                     Mijn Account
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
+                                <DropdownMenuItem asChild className="text-white">
                                     <Link href="/profiel">Profiel</Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
+                                <DropdownMenuItem asChild className="text-white">
                                     <Link href="/instellingen">
                                         Instellingen
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
+                                <DropdownMenuItem asChild className="text-white">
                                     <Link href="/uitloggen">Uitloggen</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    asChild
+                                    className="text-white"
+                                >   
+                                    <Link href="/dashboard">
+                                        Terug naar Dashboard
+                                    </Link>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
