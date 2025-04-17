@@ -4,9 +4,8 @@ use App\Http\Controllers\Admin\LogboekController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\NoteController;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\OfficerNotesController;
 use App\Http\Controllers\ProfileController;
@@ -61,7 +60,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('/{officerNote}', 'destroy')->name('.destroy');
     });
 });
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
