@@ -21,6 +21,7 @@ import {
     Hammer,
     Home,
     Menu,
+    NotebookPen,
     Ticket,
     User,
     Users,
@@ -102,6 +103,13 @@ export default function AdminLayout({ children }: PropsWithChildren) {
                             icon={<FileText />}
                             label="Rapporten"
                             active={pathname?.startsWith("/rapporten")}
+                            expanded={sidebarOpen}
+                        />
+                        <NavItem
+                            href={route("admin.logboek")}
+                            icon={<NotebookPen />}
+                            label="Logboek"
+                            active={pathname?.startsWith("/logboek")}
                             expanded={sidebarOpen}
                         />
                     </nav>

@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\LogboekController;
 use App\Http\Controllers\TrainingController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,11 @@ Route::controller(AdminController::class)->name('admin')->prefix('admin')->group
         Route::post(null, 'store')->name('.store');
         Route::post('/{training}', 'update')->name('.update');
         Route::delete('/{training}', 'destroy')->name('.destroy');
+    });
+
+    Route::controller(LogboekController::class)->name('.logboek')->prefix('logboek')->group(function () {
+        Route::get(null, 'index');
+        Route::get('/export', 'export')->name('.export');
     });
 });
 

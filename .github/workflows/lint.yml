@@ -24,9 +24,6 @@ jobs:
           COMPOSER_DISABLE_SECURITY_WARNINGS: 1
         run: composer install --no-interaction --no-scripts --prefer-dist
 
-      - name: Build Test
-        run: npm install && npm run build
-
       - name: Run Pint
         run: vendor/bin/pint
 
@@ -35,3 +32,6 @@ jobs:
         with:
           commit_message: Pint
           commit_options: '--no-verify'
+
+      - name: Build Test
+        run: npm install && npm run build
