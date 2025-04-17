@@ -32,8 +32,6 @@ Route::prefix('admin')->name('admin')->group(function () {
             Route::get('/dossier/{user}', 'dossier')->name('.dossier');
         });
 
-
-
         Route::controller(TrainingController::class)->name('.trainingen')->prefix('trainingen')->group(function () {
             Route::get(null, 'index');
             Route::post(null, 'store')->name('.store');
@@ -47,7 +45,6 @@ Route::prefix('admin')->name('admin')->group(function () {
         Route::delete('/{officerNote}', 'destroy')->name('.destroy');
     });
 });
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -72,4 +69,4 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
