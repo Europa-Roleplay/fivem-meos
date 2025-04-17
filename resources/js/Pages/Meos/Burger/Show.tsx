@@ -1,5 +1,5 @@
 import { Badge } from "@/Components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import {
     Card,
     CardContent,
@@ -236,7 +236,6 @@ export default function Show({
     );
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
 function InfoRow(props: {
     label: string;
     value: string;
