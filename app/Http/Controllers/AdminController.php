@@ -90,7 +90,7 @@ class AdminController extends Controller
 
     public function dossier()
     {
-        $user = User::with('jobGrade')->findOrFail(request()->route('user'));
+        $user = User::with(['jobGrade', 'OfficerNotes.author'])->findOrFail(request()->route('user'));
 
         return Inertia::render('Admin/Dossier', compact('user'));
     }

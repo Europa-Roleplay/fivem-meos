@@ -1,4 +1,5 @@
 import { Button } from "@/Components/ui/button";
+import FlashHandler from "@/assets/FlashHandler";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -7,6 +8,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
+import { Toaster } from "@/Components/ui/toaster";
 import { Link } from "@inertiajs/react";
 import {
     AlertTriangle,
@@ -160,6 +162,8 @@ export default function AdminLayout({ children }: PropsWithChildren) {
 
                 {/* Page content */}
                 <div className="flex-1 overflow-auto bg-zinc-950 p-4">
+                    <Toaster />
+                    <FlashHandler />
                     {children}
                 </div>
             </div>

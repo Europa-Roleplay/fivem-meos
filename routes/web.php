@@ -5,6 +5,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\OfficerNotesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrainingController;
 use Illuminate\Foundation\Application;
@@ -43,12 +47,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/', 'index');
             Route::get('/export', 'export')->name('.export');
         });
+
+        Route::controller(TrainingController::class)->name('.trainingen')->prefix('trainingen')->group(function () {
+            Route::get(null, 'index');
+            Route::post(null, 'store')->name('.store');
+            Route::post('/{training}', 'update')->name('.update');
+            Route::delete('/{training}', 'destroy')->name('.destroy');
+        });
+    });
+
+    Route::controller(OfficerNotesController::class)->name('.officernotes')->prefix('officernotes')->group(function () {
+        Route::post(null, 'store')->name('.store');
+        Route::delete('/{officerNote}', 'destroy')->name('.destroy');
     });
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

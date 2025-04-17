@@ -28,7 +28,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import { Textarea } from "@/Components/ui/textarea";
 import AdminLayout from "@/Layouts/AdminLayout";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import {
     ArrowLeft,
     Clock,
@@ -37,7 +37,9 @@ import {
     Plus,
     Save,
     Star,
+    Trash2,
 } from "lucide-react";
+import { useState } from "react";
 
 export default function Dossier({ user }: { user: any }) {
     console.log(user);
@@ -53,6 +55,8 @@ export default function Dossier({ user }: { user: any }) {
                 return "bg-blue-500/10 text-blue-400 border-blue-500/30";
         }
     };
+
+    const [note, setNote] = useState<string>("");
 
     return (
         <AdminLayout>
@@ -551,22 +555,43 @@ export default function Dossier({ user }: { user: any }) {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-4">
-                                    {/* {user.notes.map((note) => (
+                                    {user.officer_notes.map((note: any) => (
                                         <div
                                             key={note.id}
-                                            className="p-3 bg-zinc-800 rounded-md"
+                                            className="p-3 bg-zinc-800 rounded-md flex justify-between items-start"
                                         >
-                                            <div className="text-sm">
-                                                {note.text}
+                                            <div>
+                                                <div className="text-sm text-zinc-400">
+                                                    {note.note}
+                                                </div>
+                                                <div className="text-xs text-zinc-400 mt-2">
+                                                    {new Date(
+                                                        note.created_at
+                                                    ).toLocaleString(
+                                                        "nl-NL"
+                                                    )}{" "}
+                                                    • {note.author.name}
+                                                </div>
                                             </div>
-                                            <div className="text-xs text-zinc-400 mt-2">
-                                                {new Date(
-                                                    note.date
-                                                ).toLocaleString("nl-NL")}{" "}
-                                                • {note.author}
-                                            </div>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() =>
+                                                    router.delete(
+                                                        route(
+                                                            "admin.officernotes.destroy",
+                                                            {
+                                                                officerNote:
+                                                                    note.id,
+                                                            }
+                                                        )
+                                                    )
+                                                }
+                                            >
+                                                <Trash2 className="text-red-500" />
+                                            </Button>
                                         </div>
-                                    ))} */}
+                                    ))}
                                 </div>
 
                                 <div className="pt-4 border-t border-zinc-800 mt-4">
@@ -575,18 +600,30 @@ export default function Dossier({ user }: { user: any }) {
                                     </h3>
                                     <Textarea
                                         placeholder="Voeg een notitie toe over deze medewerker..."
-                                        className="bg-zinc-800 border-zinc-700 focus:border-blue-500 min-h-[100px] focus:text-white"
-                                    // value={note}
-                                    // onChange={(e) =>
-                                    //     setNote(e.target.value)
-                                    // }
+                                        className="bg-zinc-800 border-zinc-700 focus:border-blue-500 min-h-[100px] text-white"
+                                        value={note}
+                                        onChange={(e) =>
+                                            setNote(e.target.value)
+                                        }
                                     />
                                 </div>
                             </CardContent>
                             <CardFooter>
                                 <Button
                                     className="w-full"
-                                // onClick={handleAddNote}
+                                    onClick={() => {
+                                        router.post(
+                                            route(
+                                                "admin.officernotes.store",
+                                                user
+                                            ),
+                                            {
+                                                officer_id: user.id,
+                                                note: note,
+                                            }
+                                        );
+                                        setNote("");
+                                    }}
                                 >
                                     Notitie opslaan
                                 </Button>
