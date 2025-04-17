@@ -87,7 +87,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
                             expanded={sidebarOpen}
                         />
                         <NavItem
-                            href="/boetes"
+                            href={route("admin.boetes")}
                             icon={<CreditCard />}
                             label="Boetes"
                             active={pathname?.startsWith("/boetes")}
