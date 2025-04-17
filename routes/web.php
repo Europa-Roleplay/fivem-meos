@@ -20,16 +20,28 @@ Route::get('/', function () {
     ]);
 });
 
-Route::prefix('admin')->name('admin')->group(function () {
-    Route::controller(AdminController::class)->group(function () {
-        Route::get(null, 'index')->name('.index');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::controller(AdminController::class)->name('admin')->prefix('admin')->group(function () {
+        Route::get('/', 'index')->name('.index');
         Route::prefix('gebruikers')->name('.users')->group(function () {
-            Route::get(null, 'users');
-            Route::post(null, 'store')->name('.store');
+            Route::get('/', 'users');
+            Route::post('/', 'store')->name('.store');
             Route::post('/{user}', 'update')->name('.update');
             Route::delete('/{user}', 'destroy')->name('.destroy');
             Route::post('/status/{user}', 'status')->name('.status');
             Route::get('/dossier/{user}', 'dossier')->name('.dossier');
+        });
+
+        Route::controller(TrainingController::class)->name('.trainingen')->prefix('trainingen')->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store')->name('.store');
+            Route::post('/{training}', 'update')->name('.update');
+            Route::delete('/{training}', 'destroy')->name('.destroy');
+        });
+
+        Route::controller(LogboekController::class)->name('.logboek')->prefix('logboek')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/export', 'export')->name('.export');
         });
 
         Route::controller(TrainingController::class)->name('.trainingen')->prefix('trainingen')->group(function () {
