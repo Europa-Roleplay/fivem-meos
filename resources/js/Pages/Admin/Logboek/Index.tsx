@@ -8,15 +8,17 @@ import type { LogboekPagination, LogboekFilters as FiltersType } from "./types"
 interface IndexProps {
   logboek: LogboekPagination
   filters: FiltersType
+  actieTypes: string[]
+  gebruikers: string[]
 }
 
-export default function Index({ logboek, filters }: IndexProps) {
+export default function Index({ logboek, filters, actieTypes, gebruikers }: IndexProps) {
   return (
     <AdminLayout>
       <Head title="Logboek" />
       <div className="container mx-auto py-6 space-y-6 dark">
         <LogboekHeader />
-        <LogboekFilters filters={filters} />
+        <LogboekFilters filters={filters} actieTypes={actieTypes} gebruikers={gebruikers} />
         <LogboekTabel logboek={logboek} />
       </div>
     </AdminLayout>

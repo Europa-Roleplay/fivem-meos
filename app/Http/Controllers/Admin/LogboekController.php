@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Logboek;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class LogboekController extends Controller
@@ -13,16 +15,15 @@ class LogboekController extends Controller
     {
         $query = Logboek::query();
 
-        // Filters toepassen
-        if ($request->has('gebruiker')) {
-            $query->where('gebruiker', 'like', '%' . $request->gebruiker . '%');
+        if ($request->has('gebruiker') && $request->gebruiker !== '') {
+            $query->where('gebruiker', $request->gebruiker);
         }
 
-        if ($request->has('actieType') && $request->actieType !== 'alle') {
+        if ($request->has('actieType') && $request->actieType !== '' && $request->actieType !== 'alle') {
             $query->where('actie_type', $request->actieType);
         }
 
-        if ($request->has('zoekterm')) {
+        if ($request->has('zoekterm') && $request->zoekterm !== '') {
             $zoekterm = $request->zoekterm;
             $query->where(function ($q) use ($zoekterm) {
                 $q->where('beschrijving', 'like', '%' . $zoekterm . '%')
@@ -30,23 +31,34 @@ class LogboekController extends Controller
             });
         }
 
-        // Sorteren
         $sortField = $request->input('sort_field', 'created_at');
         $sortDirection = $request->input('sort_direction', 'desc');
-        
-        // Valideer de sorteervelden om SQL injectie te voorkomen
+
         $allowedSortFields = ['created_at', 'gebruiker', 'actie_type', 'beschrijving'];
         $sortField = in_array($sortField, $allowedSortFields) ? $sortField : 'created_at';
         $sortDirection = in_array($sortDirection, ['asc', 'desc']) ? $sortDirection : 'desc';
         
         $query->orderBy($sortField, $sortDirection);
 
-        // Pagineren
         $logboek = $query->paginate(10)->withQueryString();
+
+        $actieTypes = Logboek::select('actie_type')
+            ->distinct()
+            ->orderBy('actie_type')
+            ->pluck('actie_type')
+            ->toArray();
+
+        $gebruikers = Logboek::select('gebruiker')
+            ->distinct()
+            ->orderBy('gebruiker')
+            ->pluck('gebruiker')
+            ->toArray();
 
         return Inertia::render('Admin/Logboek/Index', [
             'logboek' => $logboek,
             'filters' => $request->only(['gebruiker', 'actieType', 'zoekterm']),
+            'actieTypes' => $actieTypes,
+            'gebruikers' => $gebruikers,
         ]);
     }
 
@@ -54,16 +66,15 @@ class LogboekController extends Controller
     {
         $query = Logboek::query();
 
-        // Dezelfde filters toepassen als bij index
-        if ($request->has('gebruiker')) {
-            $query->where('gebruiker', 'like', '%' . $request->gebruiker . '%');
+        if ($request->has('gebruiker') && $request->gebruiker !== '') {
+            $query->where('gebruiker', $request->gebruiker);
         }
 
-        if ($request->has('actieType') && $request->actieType !== 'alle') {
+        if ($request->has('actieType') && $request->actieType !== '' && $request->actieType !== 'alle') {
             $query->where('actie_type', $request->actieType);
         }
 
-        if ($request->has('zoekterm')) {
+        if ($request->has('zoekterm') && $request->zoekterm !== '') {
             $zoekterm = $request->zoekterm;
             $query->where(function ($q) use ($zoekterm) {
                 $q->where('beschrijving', 'like', '%' . $zoekterm . '%')
@@ -71,21 +82,17 @@ class LogboekController extends Controller
             });
         }
 
-        // Sorteren
         $sortField = $request->input('sort_field', 'created_at');
         $sortDirection = $request->input('sort_direction', 'desc');
-        
-        // Valideer de sorteervelden om SQL injectie te voorkomen
+
         $allowedSortFields = ['created_at', 'gebruiker', 'actie_type', 'beschrijving'];
         $sortField = in_array($sortField, $allowedSortFields) ? $sortField : 'created_at';
         $sortDirection = in_array($sortDirection, ['asc', 'desc']) ? $sortDirection : 'desc';
         
         $query->orderBy($sortField, $sortDirection);
 
-        // Alle resultaten ophalen voor export
         $logboek = $query->get();
 
-        // CSV export
         $filename = 'logboek_export_' . date('Y-m-d_His') . '.csv';
         $headers = [
             'Content-Type' => 'text/csv',

@@ -101,6 +101,16 @@ export default function LogboekTabel({ logboek }: LogboekTabelProps) {
     return sortDirection === "asc" ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
   }
 
+  // Functie om JSON data mooi te formatteren
+  const formatJsonData = (jsonString: string) => {
+    try {
+      const data = JSON.parse(jsonString)
+      return JSON.stringify(data, null, 2)
+    } catch (e) {
+      return jsonString
+    }
+  }
+
   return (
     <div className="space-y-4">
       <div className="rounded-md border border-zinc-800">
@@ -137,17 +147,17 @@ export default function LogboekTabel({ logboek }: LogboekTabelProps) {
           <TableBody>
             {logboek.data.map((item) => (
               <TableRow key={item.id} className="border-zinc-800 hover:bg-zinc-900">
-                <TableCell className="font-medium">
+                <TableCell className="font-medium text-zinc-300">
                   {formatDistanceToNow(new Date(item.created_at), {
                     addSuffix: true,
                     locale: nl,
                   })}
                 </TableCell>
-                <TableCell>{item.gebruiker}</TableCell>
+                <TableCell className="text-zinc-300">{item.gebruiker}</TableCell>
                 <TableCell>
                   <Badge variant={getBadgeVariant(item.actie_type)}>{getActieLabel(item.actie_type)}</Badge>
                 </TableCell>
-                <TableCell className="max-w-[300px] truncate">{item.beschrijving}</TableCell>
+                <TableCell className="max-w-[300px] truncate text-zinc-300">{item.beschrijving}</TableCell>
                 <TableCell>
                   <Dialog>
                     <DialogTrigger asChild>
@@ -158,31 +168,31 @@ export default function LogboekTabel({ logboek }: LogboekTabelProps) {
                     </DialogTrigger>
                     <DialogContent className="max-w-md bg-zinc-900 border-zinc-800">
                       <DialogHeader>
-                        <DialogTitle>Logboek Details</DialogTitle>
+                        <DialogTitle className="text-white">Logboek Details</DialogTitle>
                       </DialogHeader>
                       <ScrollArea className="max-h-[60vh]">
                         <div className="space-y-4 p-4">
                           <div>
-                            <h3 className="font-semibold">Tijdstip</h3>
-                            <p>{new Date(item.created_at).toLocaleString("nl-NL")}</p>
+                            <h3 className="font-semibold text-zinc-300">Tijdstip</h3>
+                            <p className="text-zinc-300">{new Date(item.created_at).toLocaleString("nl-NL")}</p>
                           </div>
                           <div>
-                            <h3 className="font-semibold">Gebruiker</h3>
-                            <p>{item.gebruiker}</p>
+                            <h3 className="font-semibold text-zinc-300">Gebruiker</h3>
+                            <p className="text-zinc-300">{item.gebruiker}</p>
                           </div>
                           <div>
-                            <h3 className="font-semibold">Actie</h3>
+                            <h3 className="font-semibold text-zinc-300">Actie</h3>
                             <Badge variant={getBadgeVariant(item.actie_type)}>{getActieLabel(item.actie_type)}</Badge>
                           </div>
                           <div>
-                            <h3 className="font-semibold">Beschrijving</h3>
-                            <p>{item.beschrijving}</p>
+                            <h3 className="font-semibold text-zinc-300">Beschrijving</h3>
+                            <p className="text-zinc-300">{item.beschrijving}</p>
                           </div>
                           {item.data && (
                             <div>
-                              <h3 className="font-semibold">Gegevens</h3>
-                              <pre className="mt-2 w-full rounded-md bg-zinc-950 p-4 overflow-x-auto">
-                                <code className="text-white">{JSON.stringify(JSON.parse(item.data), null, 2)}</code>
+                              <h3 className="font-semibold text-zinc-300">Gegevens</h3>
+                              <pre className="mt-2 w-full rounded-md bg-zinc-950 p-4 overflow-x-auto text-zinc-300 text-sm">
+                                <code>{formatJsonData(item.data)}</code>
                               </pre>
                             </div>
                           )}

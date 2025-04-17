@@ -12,15 +12,16 @@ import type { LogboekFilters as FiltersType } from "../types"
 
 interface LogboekFiltersProps {
   filters: FiltersType
+  actieTypes: string[]
+  gebruikers: string[]
 }
 
-export default function LogboekFilters({ filters }: LogboekFiltersProps) {
+export default function LogboekFilters({ filters, actieTypes, gebruikers }: LogboekFiltersProps) {
   const { route } = usePage().props as { route: (name: string, params?: Record<string, any>) => string }
   const [gebruiker, setGebruiker] = useState<string>(filters.gebruiker || "")
   const [actieType, setActieType] = useState<string>(filters.actieType || "")
   const [zoekterm, setZoekterm] = useState<string>(filters.zoekterm || "")
 
-  // Haal de huidige sorteervelden op uit de URL
   const urlParams = new URLSearchParams(window.location.search)
   const sortField = urlParams.get("sort_field") || "created_at"
   const sortDirection = urlParams.get("sort_direction") || "desc"
@@ -64,13 +65,19 @@ export default function LogboekFilters({ filters }: LogboekFiltersProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="gebruiker">Gebruiker</Label>
-          <Input
-            id="gebruiker"
-            placeholder="Zoek op gebruiker"
-            value={gebruiker}
-            onChange={(e) => setGebruiker(e.target.value)}
-            className="bg-zinc-800 border-zinc-700"
-          />
+          <Select value={gebruiker} onValueChange={setGebruiker}>
+            <SelectTrigger id="gebruiker" className="bg-zinc-800 border-zinc-700 text-white">
+              <SelectValue placeholder="Alle gebruikers" />
+            </SelectTrigger>
+            <SelectContent className="bg-zinc-800 border-zinc-700 max-h-[300px] text-white overflow-y-auto">
+              <SelectItem value="alle">Alle gebruikers</SelectItem>
+              {gebruikers.map((naam) => (
+                <SelectItem key={naam} value={naam}>
+                  {naam}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
@@ -79,13 +86,13 @@ export default function LogboekFilters({ filters }: LogboekFiltersProps) {
             <SelectTrigger id="actieType" className="bg-zinc-800 border-zinc-700">
               <SelectValue placeholder="Alle acties" />
             </SelectTrigger>
-            <SelectContent className="bg-zinc-800 border-zinc-700">
+            <SelectContent className="bg-zinc-800 border-zinc-700 text-white">
               <SelectItem value="alle">Alle acties</SelectItem>
-              <SelectItem value="login">Inloggen</SelectItem>
-              <SelectItem value="create">Aanmaken</SelectItem>
-              <SelectItem value="update">Bijwerken</SelectItem>
-              <SelectItem value="delete">Verwijderen</SelectItem>
-              <SelectItem value="export">Exporteren</SelectItem>
+              {actieTypes.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {getActieLabel(type)}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -93,7 +100,7 @@ export default function LogboekFilters({ filters }: LogboekFiltersProps) {
         <div className="space-y-2">
           <Label htmlFor="zoekterm">Zoekterm</Label>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-white" />
             <Input
               id="zoekterm"
               placeholder="Zoek in logboek"
@@ -116,4 +123,21 @@ export default function LogboekFilters({ filters }: LogboekFiltersProps) {
       </div>
     </Card>
   )
+}
+
+function getActieLabel(type: string): string {
+  switch (type) {
+    case "login":
+      return "Inloggen"
+    case "create":
+      return "Aanmaken"
+    case "update":
+      return "Bijwerken"
+    case "delete":
+      return "Verwijderen"
+    case "export":
+      return "Exporteren"
+    default:
+      return type
+  }
 }
