@@ -21,29 +21,35 @@ Route::get('/', function () {
     ]);
 });
 
-Route::controller(AdminController::class)->name('admin')->prefix('admin')->group(function () {
-    Route::get(null, 'index')->name('.index');
-    Route::prefix('gebruikers')->name('.users')->group(function () {
-        Route::get(null, 'users');
-        Route::post(null, 'store')->name('.store');
-        Route::post('/{user}', 'update')->name('.update');
-        Route::delete('/{user}', 'destroy')->name('.destroy');
-        Route::post('/status/{user}', 'status')->name('.status');
-        Route::get('/dossier/{user}', 'dossier')->name('.dossier');
-    });
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::controller(AdminController::class)->name('admin')->prefix('admin')->group(function () {
+        Route::get('/', 'index')->name('.index');
+        Route::prefix('gebruikers')->name('.users')->group(function () {
+            Route::get('/', 'users');
+            Route::post('/', 'store')->name('.store');
+            Route::post('/{user}', 'update')->name('.update');
+            Route::delete('/{user}', 'destroy')->name('.destroy');
+            Route::post('/status/{user}', 'status')->name('.status');
+            Route::get('/dossier/{user}', 'dossier')->name('.dossier');
+        });
 
-    Route::controller(TrainingController::class)->name('.trainingen')->prefix('trainingen')->group(function () {
-        Route::get(null, 'index');
-        Route::post(null, 'store')->name('.store');
-        Route::post('/{training}', 'update')->name('.update');
-        Route::delete('/{training}', 'destroy')->name('.destroy');
-    });
+        Route::controller(TrainingController::class)->name('.trainingen')->prefix('trainingen')->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store')->name('.store');
+            Route::post('/{training}', 'update')->name('.update');
+            Route::delete('/{training}', 'destroy')->name('.destroy');
+        });
 
-    Route::controller(LogboekController::class)->name('.logboek')->prefix('logboek')->group(function () {
-        Route::get(null, 'index');
-        Route::get('/export', 'export')->name('.export');
+        Route::controller(LogboekController::class)->name('.logboek')->prefix('logboek')->group(function () {
+            Route::get('/', 'index');
+            Route::get('/export', 'export')->name('.export');
+        });
     });
 });
+
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
