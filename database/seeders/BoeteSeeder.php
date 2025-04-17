@@ -376,7 +376,7 @@ class BoeteSeeder extends Seeder
             'beschrijving' => $beschrijving,
             'categorie' => $categorie,
             'bedrag' => $bedrag,
-            'veroordeling' => $veroordeling
+            'veroordeling' => $veroordeling,
         ]);
     }
 }
