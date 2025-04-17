@@ -9,7 +9,7 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Toaster } from "@/Components/ui/toaster";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import {
     AlertTriangle,
     Bell,
@@ -33,6 +33,7 @@ import { PropsWithChildren, useState } from "react";
 export default function MeosLayout({ children }: PropsWithChildren) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const pathname = window.location.pathname;
+    const isUserAdmin = usePage().props.auth.can.admin;
 
     return (
         <div className="flex h-screen overflow-hidden">
@@ -130,22 +131,33 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                                 align="end"
                                 className="bg-zinc-900 border-zinc-800"
                             >
-                                <DropdownMenuLabel>
+                                <DropdownMenuLabel className="text-white">
                                     Mijn Account
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
+                                <DropdownMenuItem asChild className="text-white">
                                     <Link href="/profiel">Profiel</Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem asChild>
+                                <DropdownMenuItem asChild className="text-white">
                                     <Link href="/instellingen">
                                         Instellingen
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild>
+                                <DropdownMenuItem asChild className="text-white">
                                     <Link href="/uitloggen">Uitloggen</Link>
                                 </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                {isUserAdmin && (
+                                    <DropdownMenuItem
+                                        asChild
+                                        className="text-white"
+                                    >
+                                        <Link href="/admin">
+                                            Admin Paneel
+                                        </Link>
+                                    </DropdownMenuItem>
+                                )}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
