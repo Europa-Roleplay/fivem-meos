@@ -10,7 +10,7 @@ import {
     AlertDialogTrigger,
 } from "@/Components/ui/alert-dialog";
 import { Badge } from "@/Components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import { Card } from "@/Components/ui/card";
 import {
     Dialog,
