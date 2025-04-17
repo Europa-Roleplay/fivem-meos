@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Logboek;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class LogboekController extends Controller
@@ -26,8 +24,8 @@ class LogboekController extends Controller
         if ($request->has('zoekterm') && $request->zoekterm !== '') {
             $zoekterm = $request->zoekterm;
             $query->where(function ($q) use ($zoekterm) {
-                $q->where('beschrijving', 'like', '%' . $zoekterm . '%')
-                  ->orWhere('gebruiker', 'like', '%' . $zoekterm . '%');
+                $q->where('beschrijving', 'like', '%'.$zoekterm.'%')
+                    ->orWhere('gebruiker', 'like', '%'.$zoekterm.'%');
             });
         }
 
@@ -37,7 +35,7 @@ class LogboekController extends Controller
         $allowedSortFields = ['created_at', 'gebruiker', 'actie_type', 'beschrijving'];
         $sortField = in_array($sortField, $allowedSortFields) ? $sortField : 'created_at';
         $sortDirection = in_array($sortDirection, ['asc', 'desc']) ? $sortDirection : 'desc';
-        
+
         $query->orderBy($sortField, $sortDirection);
 
         $logboek = $query->paginate(10)->withQueryString();
@@ -77,8 +75,8 @@ class LogboekController extends Controller
         if ($request->has('zoekterm') && $request->zoekterm !== '') {
             $zoekterm = $request->zoekterm;
             $query->where(function ($q) use ($zoekterm) {
-                $q->where('beschrijving', 'like', '%' . $zoekterm . '%')
-                  ->orWhere('gebruiker', 'like', '%' . $zoekterm . '%');
+                $q->where('beschrijving', 'like', '%'.$zoekterm.'%')
+                    ->orWhere('gebruiker', 'like', '%'.$zoekterm.'%');
             });
         }
 
@@ -88,23 +86,23 @@ class LogboekController extends Controller
         $allowedSortFields = ['created_at', 'gebruiker', 'actie_type', 'beschrijving'];
         $sortField = in_array($sortField, $allowedSortFields) ? $sortField : 'created_at';
         $sortDirection = in_array($sortDirection, ['asc', 'desc']) ? $sortDirection : 'desc';
-        
+
         $query->orderBy($sortField, $sortDirection);
 
         $logboek = $query->get();
 
-        $filename = 'logboek_export_' . date('Y-m-d_His') . '.csv';
+        $filename = 'logboek_export_'.date('Y-m-d_His').'.csv';
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ];
 
         $callback = function () use ($logboek) {
             $file = fopen('php://output', 'w');
-            
+
             // CSV header
             fputcsv($file, ['ID', 'Tijdstip', 'Gebruiker', 'Actie Type', 'Beschrijving']);
-            
+
             // CSV data
             foreach ($logboek as $item) {
                 fputcsv($file, [
@@ -115,7 +113,7 @@ class LogboekController extends Controller
                     $item->beschrijving,
                 ]);
             }
-            
+
             fclose($file);
         };
 

@@ -13,11 +13,11 @@ class CitizenController extends Controller
 {
     public function getCitizens()
     {
-        $players = Http::get("http://178.208.177.135:30120/eu-meos/getplayers")->json();
+        $players = Http::get('http://178.208.177.135:30120/eu-meos/getplayers')->json();
 
         foreach ($players as $player) {
             $fixedDate = null;
-            if (!empty($player['dateofbirth'])) {
+            if (! empty($player['dateofbirth'])) {
                 try {
                     $fixedDate = Carbon::createFromFormat('d/m/Y', $player['dateofbirth'])->format('Y-m-d');
                 } catch (\Exception $e) {
@@ -28,12 +28,12 @@ class CitizenController extends Controller
             Citizen::updateOrCreate(
                 ['identifier' => $player['identifier']],
                 [
-                    'identifier' => $player['identifier'] ?? "Onbekend",
-                    'firstname' => $player['firstname'] ?? "Onbekend",
-                    'lastname' => $player['lastname'] ?? "Onbekend",
+                    'identifier' => $player['identifier'] ?? 'Onbekend',
+                    'firstname' => $player['firstname'] ?? 'Onbekend',
+                    'lastname' => $player['lastname'] ?? 'Onbekend',
                     'dateofbirth' => $fixedDate,
                     'height' => $player['height'] ?? 0,
-                    'sex' => $player['sex'] ?? "Onbekend",
+                    'sex' => $player['sex'] ?? 'Onbekend',
                     'job' => $player['job'],
                     'job_grade' => $player['job_grade'],
                     'phone_number' => $player['phone_number'] ?? null,

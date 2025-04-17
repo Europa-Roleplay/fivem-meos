@@ -54,13 +54,11 @@ class User extends Authenticatable
 
     /**
      * Bepaalt of de gebruiker admin-rechten heeft.
-     *
-     * @return bool
      */
     public function isAdmin(): bool
     {
         return true;
-        
+
         // Later kun je dit aanpassen om te controleren op basis van rollen of permissies
         // return $this->hasRole('admin');
         // of

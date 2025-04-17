@@ -35,6 +35,7 @@ class TrainingController extends Controller
 
         return redirect()->back()->with('success', 'Training succesvol geupdate!');
     }
+
     public function destroy(Training $training)
     {
         $training->delete();
