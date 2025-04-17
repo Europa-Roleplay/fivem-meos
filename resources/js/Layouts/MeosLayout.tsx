@@ -1,4 +1,6 @@
 import { Button } from "@/Components/ui/button";
+import FlashHandler from "@/assets/FlashHandler";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -7,6 +9,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
+import { Toaster } from "@/Components/ui/toaster";
 import { Link } from "@inertiajs/react";
 import {
     AlertTriangle,
@@ -42,7 +45,7 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                     <Link href="/dashboard" className="flex items-center gap-2">
                         {sidebarOpen && (
                             <span className="text-xl font-bold text-blue-500">
-                                ADMIN
+                                MEOS
                             </span>
                         )}
                     </Link>
@@ -62,17 +65,17 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                 <div className="p-3">
                     <nav className="space-y-2">
                         <NavItem
-                            href={route("admin.index")}
+                            href={route("dashboard.index")}
                             icon={<Home />}
                             label="Dashboard"
-                            active={pathname === "/admin"}
+                            active={pathname === "/dashboard"}
                             expanded={sidebarOpen}
                         />
                         <NavItem
-                            href={route("admin.users")}
+                            href={route("dashboard.citizen")}
                             icon={<Users />}
                             label="Personen"
-                            active={pathname?.startsWith("/admin/gebruikers")}
+                            active={pathname?.startsWith("/dashboard/burgers")}
                             expanded={sidebarOpen}
                         />
                         <NavItem
@@ -151,6 +154,8 @@ export default function MeosLayout({ children }: PropsWithChildren) {
 
                 {/* Page content */}
                 <div className="flex-1 overflow-auto bg-zinc-950 p-4">
+                    <Toaster />
+                    <FlashHandler />
                     {children}
                 </div>
             </div>
