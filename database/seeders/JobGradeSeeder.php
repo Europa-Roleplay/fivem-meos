@@ -14,16 +14,16 @@ class JobGradeSeeder extends Seeder
     public function run(): void
     {
         $jobGrades = [
-            // Politie rangen
-            ['name' => 'Eerst Hoofd Commissaris', 'job' => 'politie'],
-            ['name' => 'Hoofd Commissaris', 'job' => 'politie'],
-            ['name' => 'Hoofd-Inspecteur', 'job' => 'politie'],
-            ['name' => 'Inspecteur', 'job' => 'politie'],
-            ['name' => 'Brigadier', 'job' => 'politie'],
-            ['name' => 'Hoofd-Agent', 'job' => 'politie'],
-            ['name' => 'Agent', 'job' => 'politie'],
-            ['name' => 'Surveillant', 'job' => 'politie'],
-            ['name' => 'Aspirant', 'job' => 'politie'],
+            // police rangen
+            ['name' => 'Eerst Hoofd Commissaris', 'job' => 'police'],
+            ['name' => 'Hoofd Commissaris', 'job' => 'police'],
+            ['name' => 'Hoofd-Inspecteur', 'job' => 'police'],
+            ['name' => 'Inspecteur', 'job' => 'police'],
+            ['name' => 'Brigadier', 'job' => 'police'],
+            ['name' => 'Hoofd-Agent', 'job' => 'police'],
+            ['name' => 'Agent', 'job' => 'police'],
+            ['name' => 'Surveillant', 'job' => 'police'],
+            ['name' => 'Aspirant', 'job' => 'police'],
 
             // kmar rangen
             ['name' => 'Luitenant Kolonel', 'job' => 'kmar'],
