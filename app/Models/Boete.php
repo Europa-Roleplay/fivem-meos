@@ -15,6 +15,6 @@ class Boete extends Model
         'beschrijving',
         'categorie',
         'bedrag',
-        'veroordeling'
+        'veroordeling',
     ];
 }

@@ -30,21 +30,21 @@ class BoeteController extends Controller
         if ($request->has('zoekterm') && $request->zoekterm !== '') {
             $zoekterm = $request->zoekterm;
             $query->where(function ($q) use ($zoekterm) {
-                $q->where('titel', 'like', '%' . $zoekterm . '%')
-                  ->orWhere('beschrijving', 'like', '%' . $zoekterm . '%')
-                  ->orWhere('artikel_nummer', 'like', '%' . $zoekterm . '%');
+                $q->where('titel', 'like', '%'.$zoekterm.'%')
+                    ->orWhere('beschrijving', 'like', '%'.$zoekterm.'%')
+                    ->orWhere('artikel_nummer', 'like', '%'.$zoekterm.'%');
             });
         }
 
         // Sorteren
         $sortField = $request->input('sort_field', 'artikel_nummer');
         $sortDirection = $request->input('sort_direction', 'asc');
-        
+
         // Valideer de sorteervelden om SQL injectie te voorkomen
         $allowedSortFields = ['artikel_nummer', 'titel', 'categorie', 'bedrag', 'veroordeling'];
         $sortField = in_array($sortField, $allowedSortFields) ? $sortField : 'artikel_nummer';
         $sortDirection = in_array($sortDirection, ['asc', 'desc']) ? $sortDirection : 'asc';
-        
+
         $query->orderBy($sortField, $sortDirection);
 
         // Pagineren
@@ -109,7 +109,7 @@ class BoeteController extends Controller
             Logboek::create([
                 'gebruiker' => Auth::user()->name,
                 'actie_type' => 'create',
-                'beschrijving' => 'Heeft een nieuwe boete aangemaakt: ' . $boete->titel,
+                'beschrijving' => 'Heeft een nieuwe boete aangemaakt: '.$boete->titel,
                 'data' => json_encode($boete),
             ]);
         }
@@ -156,11 +156,11 @@ class BoeteController extends Controller
             Logboek::create([
                 'gebruiker' => Auth::user()->name,
                 'actie_type' => 'update',
-                'beschrijving' => 'Heeft een boete bijgewerkt: ' . $boete->titel,
+                'beschrijving' => 'Heeft een boete bijgewerkt: '.$boete->titel,
                 'data' => json_encode([
                     'oud_bedrag' => $oudeBedrag,
                     'nieuw_bedrag' => $boete->bedrag,
-                    'boete' => $boete
+                    'boete' => $boete,
                 ]),
             ]);
         }
@@ -181,7 +181,7 @@ class BoeteController extends Controller
             Logboek::create([
                 'gebruiker' => Auth::user()->name,
                 'actie_type' => 'delete',
-                'beschrijving' => 'Heeft een boete verwijderd: ' . $boeteInfo['titel'],
+                'beschrijving' => 'Heeft een boete verwijderd: '.$boeteInfo['titel'],
                 'data' => json_encode($boeteInfo),
             ]);
         }
@@ -209,21 +209,21 @@ class BoeteController extends Controller
             if ($request->has('zoekterm') && $request->zoekterm !== '') {
                 $zoekterm = $request->zoekterm;
                 $query->where(function ($q) use ($zoekterm) {
-                    $q->where('titel', 'like', '%' . $zoekterm . '%')
-                      ->orWhere('beschrijving', 'like', '%' . $zoekterm . '%')
-                      ->orWhere('artikel_nummer', 'like', '%' . $zoekterm . '%');
+                    $q->where('titel', 'like', '%'.$zoekterm.'%')
+                        ->orWhere('beschrijving', 'like', '%'.$zoekterm.'%')
+                        ->orWhere('artikel_nummer', 'like', '%'.$zoekterm.'%');
                 });
             }
 
             // Sorteren
             $sortField = $request->input('sort_field', 'artikel_nummer');
             $sortDirection = $request->input('sort_direction', 'asc');
-            
+
             // Valideer de sorteervelden om SQL injectie te voorkomen
             $allowedSortFields = ['artikel_nummer', 'titel', 'categorie', 'bedrag', 'veroordeling'];
             $sortField = in_array($sortField, $allowedSortFields) ? $sortField : 'artikel_nummer';
             $sortDirection = in_array($sortDirection, ['asc', 'desc']) ? $sortDirection : 'asc';
-            
+
             $query->orderBy($sortField, $sortDirection);
 
             // Alle resultaten ophalen voor export
@@ -243,10 +243,10 @@ class BoeteController extends Controller
             }
 
             // CSV export
-            $filename = 'boetes_export_' . date('Y-m-d_His') . '.csv';
+            $filename = 'boetes_export_'.date('Y-m-d_His').'.csv';
             $headers = [
                 'Content-Type' => 'text/csv',
-                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Content-Disposition' => 'attachment; filename="'.$filename.'"',
                 'Pragma' => 'no-cache',
                 'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
                 'Expires' => '0',
@@ -254,10 +254,10 @@ class BoeteController extends Controller
 
             $callback = function () use ($boetes) {
                 $file = fopen('php://output', 'w');
-                
+
                 // CSV header
                 fputcsv($file, ['ID', 'Artikel', 'Titel', 'Beschrijving', 'Categorie', 'Bedrag', 'Veroordeling']);
-                
+
                 // CSV data
                 foreach ($boetes as $boete) {
                     fputcsv($file, [
@@ -270,15 +270,15 @@ class BoeteController extends Controller
                         $boete->veroordeling,
                     ]);
                 }
-                
+
                 fclose($file);
             };
 
             return response()->stream($callback, 200, $headers);
         } catch (\Exception $e) {
-            
+
             // Redirect terug met een foutmelding
-            return redirect()->back()->with('error', 'Er is een fout opgetreden bij het exporteren: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Er is een fout opgetreden bij het exporteren: '.$e->getMessage());
         }
     }
 }
