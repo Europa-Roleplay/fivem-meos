@@ -5,6 +5,7 @@ use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\OfficerNotesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrainingController;
 use Illuminate\Foundation\Application;
@@ -20,24 +21,34 @@ Route::get('/', function () {
     ]);
 });
 
-Route::controller(AdminController::class)->name('admin')->prefix('admin')->group(function () {
-    Route::get(null, 'index')->name('.index');
-    Route::prefix('gebruikers')->name('.users')->group(function () {
-        Route::get(null, 'users');
-        Route::post(null, 'store')->name('.store');
-        Route::post('/{user}', 'update')->name('.update');
-        Route::delete('/{user}', 'destroy')->name('.destroy');
-        Route::post('/status/{user}', 'status')->name('.status');
-        Route::get('/dossier/{user}', 'dossier')->name('.dossier');
+Route::prefix('admin')->name('admin')->group(function () {
+    Route::controller(AdminController::class)->group(function () {
+        Route::get(null, 'index')->name('.index');
+        Route::prefix('gebruikers')->name('.users')->group(function () {
+            Route::get(null, 'users');
+            Route::post(null, 'store')->name('.store');
+            Route::post('/{user}', 'update')->name('.update');
+            Route::delete('/{user}', 'destroy')->name('.destroy');
+            Route::post('/status/{user}', 'status')->name('.status');
+            Route::get('/dossier/{user}', 'dossier')->name('.dossier');
+        });
+
+
+
+        Route::controller(TrainingController::class)->name('.trainingen')->prefix('trainingen')->group(function () {
+            Route::get(null, 'index');
+            Route::post(null, 'store')->name('.store');
+            Route::post('/{training}', 'update')->name('.update');
+            Route::delete('/{training}', 'destroy')->name('.destroy');
+        });
     });
 
-    Route::controller(TrainingController::class)->name('.trainingen')->prefix('trainingen')->group(function () {
-        Route::get(null, 'index');
+    Route::controller(OfficerNotesController::class)->name('.officernotes')->prefix('officernotes')->group(function () {
         Route::post(null, 'store')->name('.store');
-        Route::post('/{training}', 'update')->name('.update');
-        Route::delete('/{training}', 'destroy')->name('.destroy');
+        Route::delete('/{officerNote}', 'destroy')->name('.destroy');
     });
 });
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

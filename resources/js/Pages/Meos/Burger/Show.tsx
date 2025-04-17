@@ -7,17 +7,27 @@ import {
     CardHeader,
     CardTitle,
 } from "@/Components/ui/card";
+import { Separator } from "@/Components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import { Textarea } from "@/Components/ui/textarea";
 import MeosLayout from "@/Layouts/MeosLayout";
 import { router } from "@inertiajs/react";
+import axios from "axios";
 import { Briefcase, FileText, User, Users } from "lucide-react";
 import { useState } from "react";
 
-export default function Show({ user, jobs }: { user: any; jobs: any[] }) {
+export default function Show({
+    user,
+    jobs,
+    licences,
+}: {
+    user: any;
+    jobs: any[];
+    licences: any[];
+}) {
     const [note, setNote] = useState<string>("");
 
-    console.log(user);
+    console.log(user, licences);
     return (
         <MeosLayout>
             <div className="p-6">
@@ -77,6 +87,50 @@ export default function Show({ user, jobs }: { user: any; jobs: any[] }) {
                                     value={`${user.height} cm`}
                                 />
                                 <InfoRow label="IBAN" value={user.iban} />
+                                <Separator />
+                                <h2 className="text-zinc-400">Rijbewijzen</h2>
+                                <InfoRow
+                                    ribba={true}
+                                    identifier={user.identifier}
+                                    licenceType="dmv"
+                                    label="Theorie"
+                                    value={
+                                        licences.includes("dmv") ? "Ja" : "Nee"
+                                    }
+                                ></InfoRow>
+                                <InfoRow
+                                    ribba={true}
+                                    identifier={user.identifier}
+                                    licenceType="drive"
+                                    label="Rijbewijs B"
+                                    value={
+                                        licences.includes("drive")
+                                            ? "Ja"
+                                            : "Nee"
+                                    }
+                                />
+                                <InfoRow
+                                    ribba={true}
+                                    identifier={user.identifier}
+                                    licenceType="drive_bike"
+                                    label="Rijbewijs A"
+                                    value={
+                                        licences.includes("drive_bike")
+                                            ? "Ja"
+                                            : "Nee"
+                                    }
+                                />
+                                <InfoRow
+                                    ribba={true}
+                                    identifier={user.identifier}
+                                    licenceType="drive_truck"
+                                    label="Rijbewijs C1 ( Vrachtwagen )"
+                                    value={
+                                        licences.includes("drive_truck")
+                                            ? "Ja"
+                                            : "Nee"
+                                    }
+                                />
                             </CardContent>
                         </Card>
                     </TabsContent>
@@ -182,11 +236,44 @@ export default function Show({ user, jobs }: { user: any; jobs: any[] }) {
     );
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
+function InfoRow(props: {
+    label: string;
+    value: string;
+    ribba?: boolean;
+    identifier?: string;
+    licenceType?: string;
+}) {
+    const { label, value, ribba, identifier, licenceType } = props;
     return (
         <div className="flex justify-between items-center">
             <span className="text-zinc-400">{label}</span>
             <span className="text-zinc-300">{value ?? "Onbekend"}</span>
+            {ribba && (
+                <Button
+                    disabled={value === "Nee"}
+                    onClick={() => {
+                        console.log(
+                            "Ribba nakken van",
+                            identifier,
+                            licenceType
+                        );
+
+                        const response = axios.post(
+                            route("api.takeLicence", {
+                                identifier: identifier,
+                                type: licenceType,
+                            })
+                        );
+                        response
+                            .then((res) => {
+                                window.location.reload();
+                            })
+                            .catch((err) => console.error(err));
+                    }}
+                >
+                    {label} afnemen
+                </Button>
+            )}
         </div>
     );
 }

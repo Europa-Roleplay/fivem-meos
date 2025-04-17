@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(JobGrade::class);
     }
+
+    public function officerNotes()
+    {
+        return $this->hasMany(OfficerNote::class, 'officer_id');
+    }
 }

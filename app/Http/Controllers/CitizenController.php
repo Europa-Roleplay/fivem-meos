@@ -6,6 +6,7 @@ use App\Models\Citizen;
 use App\Models\JobGrade;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
@@ -13,7 +14,7 @@ class CitizenController extends Controller
 {
     public function getCitizens()
     {
-        $players = Http::get("http://178.208.177.135:30120/eu-meos/getplayers")->json();
+        $players = Http::get(env('API_URL') . "/getplayers")->json();
 
         foreach ($players as $player) {
             $fixedDate = null;
@@ -47,6 +48,14 @@ class CitizenController extends Controller
         }
     }
 
+    public static function getLicense($identifier)
+    {
+        $response = Http::post(env('API_URL') . "/getlicense", [
+            'identifier' => $identifier,
+        ]);
+        return $response->json();
+    }
+
     public function index()
     {
         $users = Citizen::paginate(25);
@@ -66,12 +75,25 @@ class CitizenController extends Controller
 
     public function show($id)
     {
-        // Retrieve the citizen record by ID or fail if not found
         $user = Citizen::with(['notes' => function ($query) {
             $query->with('author');
         }])->findOrFail($id);
         $jobs = JobGrade::all();
+        $licences = self::getLicense($user->identifier)['licenses'] ?? [];
 
-        return Inertia::render('Meos/Burger/Show', compact('user', 'jobs'));
+        return Inertia::render('Meos/Burger/Show', compact('user', 'jobs', 'licences'));
+    }
+
+    public static function removeLicense($identifier, $type)
+    {
+        $response = Http::post(env('API_URL') . "/take-license", [
+            'identifier' => $identifier,
+            'licenseType' => $type,
+        ]);
+
+        return response()->json(
+            $response->json(),
+            $response->status()
+        );
     }
 }
