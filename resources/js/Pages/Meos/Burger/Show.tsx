@@ -236,6 +236,7 @@ export default function Show({
     );
 }
 
+function InfoRow({ label, value }: { label: string; value: string }) {
 function InfoRow(props: {
     label: string;
     value: string;

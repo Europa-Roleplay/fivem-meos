@@ -1,6 +1,6 @@
 import StatCard from "@/Components/StatCard";
 import { Badge } from "@/Components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 import {
     Card,
     CardContent,
@@ -171,15 +171,14 @@ export default function Dashboard({
                                     className="flex gap-3 pb-4 border-b border-zinc-800 last:border-0 last:pb-0 text-zinc-400"
                                 >
                                     <div
-                                        className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center ${
-                                            log.type === "user"
+                                        className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center ${log.type === "user"
                                                 ? "bg-blue-500/20 text-blue-500"
                                                 : log.type === "system"
-                                                ? "bg-purple-500/20 text-purple-500"
-                                                : log.type === "vehicle"
-                                                ? "bg-green-500/20 text-green-500"
-                                                : "bg-red-500/20 text-red-500"
-                                        }`}
+                                                    ? "bg-purple-500/20 text-purple-500"
+                                                    : log.type === "vehicle"
+                                                        ? "bg-green-500/20 text-green-500"
+                                                        : "bg-red-500/20 text-red-500"
+                                            }`}
                                     >
                                         {log.type === "user" ? (
                                             <User className="h-4 w-4" />

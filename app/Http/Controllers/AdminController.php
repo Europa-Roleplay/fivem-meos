@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Models\JobGrade;
+use App\Models\Logboek;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
@@ -40,10 +42,24 @@ class AdminController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        User::create($request->validated());
+        $user = User::create($request->validated());
+
+        Logboek::create([
+            'gebruiker' => Auth::user()->name,
+            'actie_type' => 'Gebruiker aangemaakt',
+            'beschrijving' => "Nieuwe gebruiker aangemaakt: {$user->name} ({$user->email}) met grade {$user->job_grade_id}",
+            'data' => json_encode([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->job_grade_id,
+                'created_by' => Auth::id(),
+            ]),
+        ]);
 
         return redirect()->back()->with('success', 'Gebruiker succesvol aan het aangemaakt!');
     }
+
     public function update(User $user, Request $request)
     {
         $user->name = $request->name;

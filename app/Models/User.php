@@ -56,4 +56,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(OfficerNote::class, 'officer_id');
     }
+
+    /**
+     * Bepaalt of de gebruiker admin-rechten heeft.
+     */
+    public function isAdmin(): bool
+    {
+        return true;
+
+        // Later kun je dit aanpassen om te controleren op basis van rollen of permissies
+        // return $this->hasRole('admin');
+        // of
+        // return $this->hasPermission('admin.access');
+    }
 }

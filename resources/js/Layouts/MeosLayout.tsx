@@ -1,5 +1,5 @@
+import { Button } from "@/Components/ui/button";
 import FlashHandler from "@/assets/FlashHandler";
-import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -37,9 +37,8 @@ export default function MeosLayout({ children }: PropsWithChildren) {
     return (
         <div className="flex h-screen overflow-hidden">
             <div
-                className={`${
-                    sidebarOpen ? "w-64" : "w-20"
-                } bg-zinc-900 border-r border-zinc-800 transition-all duration-300 flex flex-col`}
+                className={`${sidebarOpen ? "w-64" : "w-20"
+                    } bg-zinc-900 border-r border-zinc-800 transition-all duration-300 flex flex-col`}
             >
                 <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
                     <Link href="/dashboard" className="flex items-center gap-2">
@@ -179,11 +178,10 @@ function NavItem({
     return (
         <Link
             href={href}
-            className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${
-                active
+            className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${active
                     ? "bg-blue-500 text-white"
                     : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-            }`}
+                }`}
         >
             <div className="flex-shrink-0">{icon}</div>
             {expanded && <span>{label}</span>}
