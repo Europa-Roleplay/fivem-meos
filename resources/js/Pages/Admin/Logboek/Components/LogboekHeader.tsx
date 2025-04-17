@@ -11,13 +11,13 @@ export default function LogboekHeader() {
     router.get(route("admin.logboek.export"))
   }
 
-  // Pas de header aan voor dark mode
   return (
     <div className="flex items-center justify-between">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-white">Logboek</h1>
         <p className="text-zinc-400">Bekijk alle acties die zijn uitgevoerd in het systeem</p>
       </div>
+      {/*}
       <Button
         variant="outline"
         size="sm"
@@ -26,7 +26,7 @@ export default function LogboekHeader() {
       >
         <Download className="mr-2 h-4 w-4" />
         Exporteer
-      </Button>
+      </Button>*/}
     </div>
   )
 }
