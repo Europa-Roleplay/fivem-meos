@@ -6,7 +6,7 @@ import { Card } from "@/Components/ui/card"
 import { Input } from "@/Components/ui/input"
 import { Label } from "@/Components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/Components/ui/select"
-import { router, usePage } from "@inertiajs/react"
+import { router } from "@inertiajs/react"
 import { FilterX, Search } from "lucide-react"
 import type { LogboekFilters as FiltersType } from "../types"
 
@@ -17,7 +17,6 @@ interface LogboekFiltersProps {
 }
 
 export default function LogboekFilters({ filters, actieTypes, gebruikers }: LogboekFiltersProps) {
-  const { route } = usePage().props as { route: (name: string, params?: Record<string, any>) => string }
   const [gebruiker, setGebruiker] = useState<string>(filters.gebruiker || "")
   const [actieType, setActieType] = useState<string>(filters.actieType || "")
   const [zoekterm, setZoekterm] = useState<string>(filters.zoekterm || "")
@@ -28,7 +27,7 @@ export default function LogboekFilters({ filters, actieTypes, gebruikers }: Logb
 
   const applyFilters = () => {
     router.get(
-      route("admin.logboek.index"),
+      "/admin/logboek",
       {
         gebruiker: gebruiker || undefined,
         actieType: actieType || undefined,
@@ -48,7 +47,7 @@ export default function LogboekFilters({ filters, actieTypes, gebruikers }: Logb
     setActieType("")
     setZoekterm("")
     router.get(
-      route("admin.logboek.index"),
+      "/admin/logboek",
       {
         sort_field: sortField,
         sort_direction: sortDirection,

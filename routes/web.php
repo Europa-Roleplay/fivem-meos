@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\LogboekController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\DashboardController;
