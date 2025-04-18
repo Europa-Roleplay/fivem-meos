@@ -29,7 +29,7 @@ interface ActivityItem {
   gebruiker: string
   actie_type: string
   beschrijving: string
-  data: string
+  data?: string
   created_at: string
   updated_at: string
 }

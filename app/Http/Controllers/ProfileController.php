@@ -6,7 +6,6 @@ use App\Models\LoginSession;
 use App\Models\User;
 use App\Models\Logboek;
 use App\Mail\PasswordResetMail;
-use App\Models\Logboek;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
