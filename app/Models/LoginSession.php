@@ -44,6 +44,7 @@ class LoginSession extends Model
         } elseif (preg_match('/android|ipad|playbook|silk/i', $userAgent)) {
             return 'Tablet';
         }
+
         return 'Desktop';
     }
 
@@ -63,6 +64,7 @@ class LoginSession extends Model
         } elseif (strpos($userAgent, 'MSIE') !== false || strpos($userAgent, 'Trident/') !== false) {
             return 'Internet Explorer';
         }
+
         return 'Onbekend';
     }
 }
