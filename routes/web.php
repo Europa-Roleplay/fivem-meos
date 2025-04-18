@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BoeteController;
 use App\Http\Controllers\Admin\LogboekController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NoteController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\OfficerNotesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrainingController;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,6 +23,27 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+// Wachtwoord reset routes
+// Wachtwoord reset routes
+Route::get('/wachtwoord-vergeten', function () {
+    return Inertia::render('Auth/ForgotPassword');
+})->middleware('guest')->name('password.request');
+
+Route::post('/wachtwoord-vergeten', [PasswordResetController::class, 'sendResetLinkEmail'])
+    ->middleware('guest')
+    ->name('password.email');
+
+Route::get('/wachtwoord-resetten/{token}', function (string $token) {
+    return Inertia::render('Auth/ResetPassword', [
+        'token' => $token,
+        'email' => request('email'),
+    ]);
+})->middleware('guest')->name('password.reset');
+
+Route::match(['post', 'put'], '/wachtwoord-resetten', [PasswordResetController::class, 'reset'])
+    ->middleware('guest')
+    ->name('password.update');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::controller(AdminController::class)->name('admin')->prefix('admin')->group(function () {
@@ -81,7 +104,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/notifications', 'updateNotifications')->name('notifications.update');
         Route::delete('/account', 'destroy')->name('destroy');
     });
-    
+
     Route::controller(NoteController::class)->name('note')->prefix('notities')->group(function () {
         Route::post(null, 'store')->name('.store');
         Route::post('/{note}', 'update')->name('.update');
@@ -99,5 +122,12 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
+
+Route::get('/log-out', function () {
+    if (Auth::check()) {
+        Auth::logout();
+    }
+    return redirect('/login')->with('status', 'Je bent succesvol uitgelogd.');
+})->name('logout');
 
 require __DIR__.'/auth.php';

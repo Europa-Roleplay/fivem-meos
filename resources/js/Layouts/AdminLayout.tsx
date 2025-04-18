@@ -160,7 +160,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem asChild className="text-white">
-                                    <Link href="/uitloggen">Uitloggen</Link>
+                                    <Link href="/log-out">Uitloggen</Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem

@@ -46,7 +46,7 @@ class AdminController extends Controller
 
         Logboek::create([
             'gebruiker' => Auth::user()->name,
-            'actie_type' => 'Gebruiker aangemaakt',
+            'actie_type' => 'create',
             'beschrijving' => "Nieuwe gebruiker aangemaakt: {$user->name} ({$user->email}) met grade {$user->job_grade_id}",
             'data' => json_encode([
                 'user_id' => $user->id,

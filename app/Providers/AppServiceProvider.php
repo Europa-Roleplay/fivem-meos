@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use App\Mail\PasswordResetMail;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Mail;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +24,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Vite::prefetch(concurrency: 3);
+        ResetPassword::toMailUsing(function ($notifiable, $token) {
+            $email = $notifiable->getEmailForPasswordReset();
+
+            Mail::to($email)->send(new PasswordResetMail($token, $email));
+
+            return null;
+        });
     }
 }

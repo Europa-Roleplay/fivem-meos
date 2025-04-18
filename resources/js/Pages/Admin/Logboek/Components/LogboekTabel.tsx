@@ -85,7 +85,6 @@ export default function LogboekTabel({ logboek }: LogboekTabelProps) {
     return sortDirection === "asc" ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
   }
 
-  // Functie om JSON data mooi te formatteren
   const formatJsonData = (jsonString: string) => {
     try {
       const data = JSON.parse(jsonString)
@@ -146,7 +145,7 @@ export default function LogboekTabel({ logboek }: LogboekTabelProps) {
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button variant="ghost" size="icon" className="hover:bg-zinc-800">
-                        <Info className="h-4 w-4" />
+                        <Info className="h-4 w-4 text-white" />
                         <span className="sr-only">Details</span>
                       </Button>
                     </DialogTrigger>
