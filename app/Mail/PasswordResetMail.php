@@ -2,21 +2,23 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
 
 class PasswordResetMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $token;
+
     public $email;
+
     public $resetUrl;
+
     public $user;
 
     /**
@@ -30,7 +32,7 @@ class PasswordResetMail extends Mailable
             'token' => $this->token,
             'email' => $this->email,
         ], false));
-        
+
         $this->user = User::where('email', $email)->first();
     }
 
