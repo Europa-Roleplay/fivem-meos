@@ -71,10 +71,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+    Route::controller(ProfileController::class)->prefix('profiel')->name('profile.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::put('/update', 'updateProfile')->name('update');
+        Route::post('/photo', 'updateProfilePhoto')->name('photo.update');
+        Route::delete('/photo', 'deleteProfilePhoto')->name('photo.delete');
+        Route::put('/password', 'updatePassword')->name('password.update');
+        Route::post('/password-reset', 'sendPasswordResetLink')->name('password.email');
+        Route::put('/notifications', 'updateNotifications')->name('notifications.update');
+        Route::delete('/account', 'destroy')->name('destroy');
+    });
+    
     Route::controller(NoteController::class)->name('note')->prefix('notities')->group(function () {
         Route::post(null, 'store')->name('.store');
         Route::post('/{note}', 'update')->name('.update');
