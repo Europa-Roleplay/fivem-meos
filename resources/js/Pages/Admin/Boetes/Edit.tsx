@@ -28,12 +28,17 @@ export default function Edit({ boete, categorieën }: EditProps) {
     veroordeling: boete.veroordeling,
   })
 
-  const [customCategorie, setCustomCategorie] = useState<string>("")
+  const isBestaandeCategorie = categorieën.includes(data.categorie)
+
+  const [isNieuweCategorie, setIsNieuweCategorie] = useState<boolean>(!isBestaandeCategorie)
+  const [customCategorie, setCustomCategorie] = useState<string>(isBestaandeCategorie ? "" : data.categorie)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     put(`/admin/boetes/${boete.id}`)
   }
+
+  const selectValue = isNieuweCategorie ? "nieuw" : data.categorie
 
   return (
     <AdminLayout>
@@ -101,11 +106,18 @@ export default function Edit({ boete, categorieën }: EditProps) {
                   </Label>
                   <div className="flex gap-2">
                     <Select
-                      value={categorieën.includes(data.categorie) ? data.categorie : "nieuw"}
+                      value={selectValue}
                       onValueChange={(value) => {
                         if (value === "nieuw") {
-                          setCustomCategorie(data.categorie)
+                          // Schakel naar nieuwe categorie modus
+                          setIsNieuweCategorie(true)
+                          // Behoud de huidige waarde in het input veld als het een aangepaste categorie was
+                          if (!isBestaandeCategorie) {
+                            setCustomCategorie(data.categorie)
+                          }
                         } else {
+                          // Schakel naar bestaande categorie modus
+                          setIsNieuweCategorie(false)
                           setData("categorie", value)
                         }
                       }}
@@ -122,15 +134,17 @@ export default function Edit({ boete, categorieën }: EditProps) {
                         <SelectItem value="nieuw">Nieuwe categorie</SelectItem>
                       </SelectContent>
                     </Select>
-                    {!categorieën.includes(data.categorie) && (
+                    {isNieuweCategorie && (
                       <Input
                         value={customCategorie}
                         onChange={(e) => {
-                          setCustomCategorie(e.target.value)
-                          setData("categorie", e.target.value)
+                          const newValue = e.target.value
+                          setCustomCategorie(newValue)
+                          setData("categorie", newValue)
                         }}
                         className="bg-zinc-800 border-zinc-700 text-white"
                         placeholder="Nieuwe categorie"
+                        autoFocus
                       />
                     )}
                   </div>

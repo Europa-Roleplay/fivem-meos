@@ -26,12 +26,15 @@ export default function Create({ categorieën }: CreateProps) {
     veroordeling: "Eerste Veroordeling",
   })
 
+  const [isNieuweCategorie, setIsNieuweCategorie] = useState<boolean>(true)
   const [customCategorie, setCustomCategorie] = useState<string>("")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     post("/admin/boetes")
   }
+
+  const selectValue = isNieuweCategorie ? "nieuw" : data.categorie
 
   return (
     <AdminLayout>
@@ -99,11 +102,18 @@ export default function Create({ categorieën }: CreateProps) {
                   </Label>
                   <div className="flex gap-2">
                     <Select
-                      value={data.categorie}
+                      value={selectValue}
                       onValueChange={(value) => {
                         if (value === "nieuw") {
-                          setData("categorie", "")
+                          // Schakel naar nieuwe categorie modus
+                          setIsNieuweCategorie(true)
+                          // Behoud de huidige waarde in het input veld
+                          if (data.categorie && !categorieën.includes(data.categorie)) {
+                            setCustomCategorie(data.categorie)
+                          }
                         } else {
+                          // Schakel naar bestaande categorie modus
+                          setIsNieuweCategorie(false)
                           setData("categorie", value)
                         }
                       }}
@@ -120,15 +130,17 @@ export default function Create({ categorieën }: CreateProps) {
                         <SelectItem value="nieuw">Nieuwe categorie</SelectItem>
                       </SelectContent>
                     </Select>
-                    {data.categorie === "" && (
+                    {isNieuweCategorie && (
                       <Input
                         value={customCategorie}
                         onChange={(e) => {
-                          setCustomCategorie(e.target.value)
-                          setData("categorie", e.target.value)
+                          const newValue = e.target.value
+                          setCustomCategorie(newValue)
+                          setData("categorie", newValue)
                         }}
                         className="bg-zinc-800 border-zinc-700 text-white"
                         placeholder="Nieuwe categorie"
+                        autoFocus
                       />
                     )}
                   </div>
