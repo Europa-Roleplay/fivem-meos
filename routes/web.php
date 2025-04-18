@@ -127,6 +127,7 @@ Route::get('/log-out', function () {
     if (Auth::check()) {
         Auth::logout();
     }
+
     return redirect('/login')->with('status', 'Je bent succesvol uitgelogd.');
 })->name('logout');
 

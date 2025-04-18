@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Logboek;
 use App\Mail\PasswordResetMail;
+use App\Models\Logboek;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -165,7 +163,7 @@ class ProfileController extends Controller
                 [
                     'email' => $user->email,
                     'token' => Hash::make($token),
-                    'created_at' => now()
+                    'created_at' => now(),
                 ]
             );
 
@@ -180,9 +178,9 @@ class ProfileController extends Controller
 
             return redirect()->back()->with('success', 'Wachtwoord reset link is verzonden naar je e-mail.');
         } catch (\Exception $e) {
-            Log::error('Wachtwoord reset fout: ' . $e->getMessage());
+            Log::error('Wachtwoord reset fout: '.$e->getMessage());
 
-            return redirect()->back()->with('error', 'Er is een fout opgetreden bij het verzenden van de reset link: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Er is een fout opgetreden bij het verzenden van de reset link: '.$e->getMessage());
         }
     }
 

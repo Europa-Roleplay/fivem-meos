@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Logboek;
 use App\Mail\PasswordResetMail;
-use Illuminate\Auth\Events\PasswordReset;
+use App\Models\Logboek;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class PasswordResetController extends Controller
 {
@@ -26,8 +23,8 @@ class PasswordResetController extends Controller
 
         try {
             $user = \App\Models\User::where('email', $request->email)->first();
-            
-            if (!$user) {
+
+            if (! $user) {
                 return back()->withErrors(['email' => 'We kunnen geen gebruiker vinden met dat e-mailadres.']);
             }
 
@@ -38,7 +35,7 @@ class PasswordResetController extends Controller
                 [
                     'email' => $request->email,
                     'token' => Hash::make($token),
-                    'created_at' => now()
+                    'created_at' => now(),
                 ]
             );
 
@@ -49,11 +46,11 @@ class PasswordResetController extends Controller
                 'actie_type' => 'update',
                 'beschrijving' => 'Heeft een wachtwoord reset link aangevraagd',
             ]);
-            
+
             return back()->with('status', 'We hebben je een e-mail gestuurd met een link om je wachtwoord te resetten!');
         } catch (\Exception $e) {
-            Log::error('Wachtwoord reset fout: ' . $e->getMessage());
-            
+            Log::error('Wachtwoord reset fout: '.$e->getMessage());
+
             return back()->withErrors(['email' => 'Er is een fout opgetreden bij het verzenden van de reset link.']);
         }
     }
@@ -73,7 +70,7 @@ class PasswordResetController extends Controller
             ->where('email', $request->email)
             ->first();
 
-        if (!$tokenData || !Hash::check($request->token, $tokenData->token)) {
+        if (! $tokenData || ! Hash::check($request->token, $tokenData->token)) {
             return back()->withErrors(['email' => 'Ongeldige token.']);
         }
 
@@ -84,7 +81,7 @@ class PasswordResetController extends Controller
 
         $user = \App\Models\User::where('email', $request->email)->first();
 
-        if (!$user) {
+        if (! $user) {
             return back()->withErrors(['email' => 'We kunnen geen gebruiker vinden met dat e-mailadres.']);
         }
 
@@ -103,4 +100,3 @@ class PasswordResetController extends Controller
         return redirect('/login')->with('status', 'Je wachtwoord is succesvol gereset!');
     }
 }
-
