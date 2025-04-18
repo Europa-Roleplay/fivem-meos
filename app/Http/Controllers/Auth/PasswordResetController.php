@@ -24,7 +24,7 @@ class PasswordResetController extends Controller
         try {
             $user = \App\Models\User::where('email', $request->email)->first();
 
-            if (! $user) {
+            if (!$user) {
                 return back()->withErrors(['email' => 'We kunnen geen gebruiker vinden met dat e-mailadres.']);
             }
 
@@ -49,7 +49,7 @@ class PasswordResetController extends Controller
 
             return back()->with('status', 'We hebben je een e-mail gestuurd met een link om je wachtwoord te resetten!');
         } catch (\Exception $e) {
-            Log::error('Wachtwoord reset fout: '.$e->getMessage());
+            Log::error('Wachtwoord reset fout: ' . $e->getMessage());
 
             return back()->withErrors(['email' => 'Er is een fout opgetreden bij het verzenden van de reset link.']);
         }
@@ -70,7 +70,7 @@ class PasswordResetController extends Controller
             ->where('email', $request->email)
             ->first();
 
-        if (! $tokenData || ! Hash::check($request->token, $tokenData->token)) {
+        if (!$tokenData || !Hash::check($request->token, $tokenData->token)) {
             return back()->withErrors(['email' => 'Ongeldige token.']);
         }
 
@@ -81,7 +81,7 @@ class PasswordResetController extends Controller
 
         $user = \App\Models\User::where('email', $request->email)->first();
 
-        if (! $user) {
+        if (!$user) {
             return back()->withErrors(['email' => 'We kunnen geen gebruiker vinden met dat e-mailadres.']);
         }
 

@@ -78,7 +78,7 @@ class ProfileController extends Controller
             ->where('user_id', $user->id)
             ->first();
 
-        if (! $sessie) {
+        if (!$sessie) {
             return redirect()->back()->with('error', 'Sessie niet gevonden.');
         }
 
@@ -241,9 +241,9 @@ class ProfileController extends Controller
 
             return redirect()->back()->with('success', 'Wachtwoord reset link is verzonden naar je e-mail.');
         } catch (\Exception $e) {
-            Log::error('Wachtwoord reset fout: '.$e->getMessage());
+            Log::error('Wachtwoord reset fout: ' . $e->getMessage());
 
-            return redirect()->back()->with('error', 'Er is een fout opgetreden bij het verzenden van de reset link: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Er is een fout opgetreden bij het verzenden van de reset link: ' . $e->getMessage());
         }
     }
 

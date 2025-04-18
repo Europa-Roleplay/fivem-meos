@@ -46,7 +46,7 @@ class AuthenticatedSessionController extends Controller
             ->where('is_actief', true)
             ->first();
 
-        if (! $existingSession) {
+        if (!$existingSession) {
             LoginSession::create([
                 'user_id' => $user->id,
                 'session_id' => $sessionId,

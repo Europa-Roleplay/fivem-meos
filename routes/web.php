@@ -132,4 +132,4 @@ Route::get('/log-out', function () {
     return redirect('/login')->with('status', 'Je bent succesvol uitgelogd.');
 })->name('logout');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

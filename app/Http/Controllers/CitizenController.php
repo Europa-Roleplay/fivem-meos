@@ -13,11 +13,11 @@ class CitizenController extends Controller
 {
     public function getCitizens()
     {
-        $players = Http::get(env('API_URL').'/getplayers')->json();
+        $players = Http::get(env('API_URL') . '/getplayers')->json();
 
         foreach ($players as $player) {
             $fixedDate = null;
-            if (! empty($player['dateofbirth'])) {
+            if (!empty($player['dateofbirth'])) {
                 try {
                     $fixedDate = Carbon::createFromFormat('d/m/Y', $player['dateofbirth'])->format('Y-m-d');
                 } catch (\Exception $e) {
@@ -49,7 +49,7 @@ class CitizenController extends Controller
 
     public static function getLicense($identifier)
     {
-        $response = Http::post(env('API_URL').'/getlicense', [
+        $response = Http::post(env('API_URL') . '/getlicense', [
             'identifier' => $identifier,
         ]);
 
@@ -86,7 +86,7 @@ class CitizenController extends Controller
 
     public static function removeLicense($identifier, $type)
     {
-        $response = Http::post(env('API_URL').'/take-license', [
+        $response = Http::post(env('API_URL') . '/take-license', [
             'identifier' => $identifier,
             'licenseType' => $type,
         ]);
