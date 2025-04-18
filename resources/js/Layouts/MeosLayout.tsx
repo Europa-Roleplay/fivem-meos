@@ -28,15 +28,18 @@ import {
     Users,
     X,
 } from "lucide-react";
+import type { User as Gebruiker } from "@/types";
 import { PropsWithChildren, useState } from "react";
 import type { PageProps } from "@/types"
 
 export default function MeosLayout({ children }: PropsWithChildren) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const pathname = window.location.pathname;
-    const { auth } = usePage<PageProps>().props
-    const user = auth.user
-    const isUserAdmin = usePage().props.auth.can.admin;
+    const auth = usePage().props.auth as { user: Gebruiker; can?: { admin?: boolean } };
+    let isUserAdmin = false;
+    if (auth.user && auth.can?.admin) {
+        isUserAdmin = auth.can.admin;
+    }
 
     return (
         <div className="flex h-screen overflow-hidden">

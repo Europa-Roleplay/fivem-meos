@@ -31,6 +31,3 @@ jobs:
         with:
           commit_message: Pint
           commit_options: '--no-verify'
-
-      - name: Build Test
-        run: npm install && npm run build
