@@ -52,7 +52,7 @@ export default function PasswordUpdate() {
               onChange={(e) => setData("current_password", e.target.value)}
               className="bg-zinc-800 border-zinc-700 text-white"
             />
-            {errors.current_password && <p className="text-blue-500 text-sm">{errors.current_password}</p>}
+            {errors.current_password && <p className="text-red-500 text-sm">{errors.current_password}</p>}
           </div>
 
           <div className="space-y-2">
@@ -66,7 +66,7 @@ export default function PasswordUpdate() {
               onChange={(e) => setData("password", e.target.value)}
               className="bg-zinc-800 border-zinc-700 text-white"
             />
-            {errors.password && <p className="text-blue-500 text-sm">{errors.password}</p>}
+            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
           </div>
 
           <div className="space-y-2">

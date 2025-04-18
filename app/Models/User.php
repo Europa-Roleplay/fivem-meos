@@ -61,6 +61,14 @@ class User extends Authenticatable
     }
 
     /**
+     * De login sessies van deze gebruiker.
+     */
+    public function loginSessions()
+    {
+        return $this->hasMany(LoginSession::class);
+    }
+
+    /**
      * Bepaalt of de gebruiker admin-rechten heeft.
      */
     public function isAdmin(): bool

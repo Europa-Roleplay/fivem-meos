@@ -8,6 +8,7 @@ import { Button } from "@/Components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/Components/ui/card"
 import { Camera, Trash2, Upload } from "lucide-react"
 import type { User } from "@/types"
+import { router } from "@inertiajs/react"
 
 interface ProfilePhotoProps {
   user: User & {
@@ -20,16 +21,7 @@ export default function ProfilePhoto({ user, hasProfilePhoto }: ProfilePhotoProp
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const {
-    data,
-    setData,
-    post,
-    delete: destroy,
-    processing,
-    errors,
-    progress,
-    reset,
-  } = useForm({
+  const { data, setData, processing, errors, progress, reset } = useForm({
     photo: null as File | null,
   })
 
@@ -51,19 +43,25 @@ export default function ProfilePhoto({ user, hasProfilePhoto }: ProfilePhotoProp
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
     if (data.photo) {
-      post(route("profile.photo.update"), {
-        forceFormData: true,
-        onSuccess: () => {
-          setPreviewUrl(null)
-          reset()
+      router.post(
+        "/profiel/photo",
+        {
+          photo: data.photo,
         },
-      })
+        {
+          forceFormData: true,
+          onSuccess: () => {
+            setPreviewUrl(null)
+            reset()
+          },
+        },
+      )
     }
   }
 
   const deletePhoto = () => {
     if (confirm("Weet je zeker dat je je profielfoto wilt verwijderen?")) {
-      destroy(route("profile.photo.delete"))
+      router.delete("/profiel/photo")
     }
   }
 
@@ -100,7 +98,7 @@ export default function ProfilePhoto({ user, hasProfilePhoto }: ProfilePhotoProp
 
             <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
 
-            {errors.photo && <p className="text-blue-500 text-sm">{errors.photo}</p>}
+            {errors.photo && <p className="text-red-500 text-sm">{errors.photo}</p>}
 
             {progress && (
               <div className="w-full bg-zinc-700 rounded-full h-2.5 mb-4">
@@ -124,7 +122,7 @@ export default function ProfilePhoto({ user, hasProfilePhoto }: ProfilePhotoProp
 
           <div className="flex gap-2">
             {hasProfilePhoto && (
-              <Button type="button" variant="destructive" onClick={deletePhoto} className="bg-blue-700 hover:bg-blue-800">
+              <Button type="button" variant="destructive" onClick={deletePhoto} className="bg-red-700 hover:bg-red-800">
                 <Trash2 className="mr-2 h-4 w-4" />
                 Verwijderen
               </Button>

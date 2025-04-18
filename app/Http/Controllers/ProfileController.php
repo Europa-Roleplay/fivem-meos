@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LoginSession;
 use App\Models\User;
 use App\Models\Logboek;
 use App\Mail\PasswordResetMail;
@@ -22,21 +23,113 @@ class ProfileController extends Controller
     /**
      * Toon de profielpagina van de gebruiker.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
+        $huidigeSessionId = session()->getId();
 
-        $recenteActiviteiten = Logboek::where('gebruiker', $user->name)
-            ->where('actie_type', 'login')
+        $recenteActiviteiten = LoginSession::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->take(5)
+            ->take(10)
+            ->get()
+            ->map(function ($sessie) {
+                return [
+                    'id' => $sessie->id,
+                    'gebruiker' => $sessie->user->name ?? 'Onbekend',
+                    'actie_type' => $sessie->is_actief ? 'login' : 'logout',
+                    'beschrijving' => $sessie->is_actief 
+                        ? "Ingelogd vanaf {$sessie->apparaat_type} met {$sessie->browser}" 
+                        : "Uitgelogd vanaf {$sessie->apparaat_type} met {$sessie->browser}",
+                    'data' => json_encode([
+                        'ip_adres' => $sessie->ip_adres,
+                        'apparaat_type' => $sessie->apparaat_type,
+                        'browser' => $sessie->browser,
+                        'laatste_activiteit' => $sessie->laatste_activiteit,
+                    ]),
+                    'created_at' => $sessie->created_at,
+                    'updated_at' => $sessie->updated_at,
+                ];
+            });
+
+        $actieveSessies = LoginSession::where('user_id', $user->id)
+            ->where('is_actief', true)
+            ->orderBy('laatste_activiteit', 'desc')
             ->get();
 
+        foreach ($actieveSessies as $sessie) {
+            $sessie->is_huidige_sessie = ($sessie->session_id === $huidigeSessionId);
+        }
+        
         return Inertia::render('Profile/Index', [
             'user' => $user,
             'recenteActiviteiten' => $recenteActiviteiten,
+            'actieveSessies' => $actieveSessies,
             'hasProfilePhoto' => $user->profile_photo_path !== null,
         ]);
+    }
+
+    /**
+     * Beëindig een specifieke sessie.
+     */
+    public function beeindigSessie(Request $request, $id)
+    {
+        $user = Auth::user();
+        $huidigeSessionId = session()->getId();
+        
+        $sessie = LoginSession::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+            
+        if (!$sessie) {
+            return redirect()->back()->with('error', 'Sessie niet gevonden.');
+        }
+        
+        // Controleer of dit de huidige sessie is
+        if ($sessie->session_id === $huidigeSessionId) {
+            // Log de gebruiker uit
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            
+            return redirect('/login')->with('success', 'Je bent uitgelogd.');
+        }
+
+        if ($sessie->session_id) {
+            DB::table('sessions')->where('id', $sessie->session_id)->delete();
+        }
+
+        $sessie->update([
+            'is_actief' => false
+        ]);
+        
+        return redirect()->back()->with('success', 'Sessie succesvol beëindigd.');
+    }
+
+    /**
+     * Beëindig alle andere sessies.
+     */
+    public function beeindigAlleSessies(Request $request)
+    {
+        $user = Auth::user();
+        $huidigeSessionId = session()->getId();
+
+        $andereSessies = LoginSession::where('user_id', $user->id)
+            ->where('is_actief', true)
+            ->where('session_id', '!=', $huidigeSessionId)
+            ->get();
+
+        foreach ($andereSessies as $sessie) {
+            if ($sessie->session_id) {
+                DB::table('sessions')->where('id', $sessie->session_id)->delete();
+            }
+        }
+
+        LoginSession::where('user_id', $user->id)
+            ->where('is_actief', true)
+            ->where('session_id', '!=', $huidigeSessionId)
+            ->update(['is_actief' => false]);
+        
+        return redirect()->back()->with('success', 'Alle andere sessies zijn beëindigd.');
     }
 
     /**
@@ -45,34 +138,23 @@ class ProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-
+        
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
         ]);
 
-        // Controleer of de e-mail is gewijzigd
         $emailChanged = $user->email !== $validated['email'];
-
+        
         $user->name = $validated['name'];
-
+        
         if ($emailChanged) {
             $user->email = $validated['email'];
             // Hier zou je een e-mailverificatie kunnen sturen als dat nodig is
         }
-
+        
         $user->save();
-
-        Logboek::create([
-            'gebruiker' => $user->name,
-            'actie_type' => 'update',
-            'beschrijving' => 'Heeft profielgegevens bijgewerkt',
-            'data' => json_encode([
-                'name_changed' => $user->name !== $validated['name'],
-                'email_changed' => $emailChanged,
-            ]),
-        ]);
-
+        
         return redirect()->back()->with('success', 'Profielgegevens bijgewerkt.');
     }
 
@@ -95,12 +177,6 @@ class ProfileController extends Controller
         $user->profile_photo_path = $path;
         $user->save();
 
-        Logboek::create([
-            'gebruiker' => $user->name,
-            'actie_type' => 'update',
-            'beschrijving' => 'Heeft profielfoto bijgewerkt',
-        ]);
-
         return redirect()->back()->with('success', 'Profielfoto bijgewerkt.');
     }
 
@@ -115,12 +191,6 @@ class ProfileController extends Controller
             Storage::disk('public')->delete($user->profile_photo_path);
             $user->profile_photo_path = null;
             $user->save();
-
-            Logboek::create([
-                'gebruiker' => $user->name,
-                'actie_type' => 'delete',
-                'beschrijving' => 'Heeft profielfoto verwijderd',
-            ]);
         }
 
         return redirect()->back()->with('success', 'Profielfoto verwijderd.');
@@ -139,12 +209,6 @@ class ProfileController extends Controller
         $user = Auth::user();
         $user->password = Hash::make($validated['password']);
         $user->save();
-
-        Logboek::create([
-            'gebruiker' => $user->name,
-            'actie_type' => 'update',
-            'beschrijving' => 'Heeft wachtwoord gewijzigd',
-        ]);
 
         return redirect()->back()->with('success', 'Wachtwoord bijgewerkt.');
     }
@@ -171,7 +235,6 @@ class ProfileController extends Controller
 
             Mail::to($user->email)->send(new PasswordResetMail($token, $user->email));
 
-            // Log de actie
             Logboek::create([
                 'gebruiker' => $user->name,
                 'actie_type' => 'update',
@@ -184,29 +247,6 @@ class ProfileController extends Controller
 
             return redirect()->back()->with('error', 'Er is een fout opgetreden bij het verzenden van de reset link: ' . $e->getMessage());
         }
-    }
-
-    /**
-     * Update de notificatie-instellingen van de gebruiker.
-     */
-    public function updateNotifications(Request $request)
-    {
-        $validated = $request->validate([
-            'email_notifications' => ['boolean'],
-            'browser_notifications' => ['boolean'],
-        ]);
-
-        $user = Auth::user();
-        $user->settings = array_merge($user->settings ?? [], $validated);
-        $user->save();
-
-        Logboek::create([
-            'gebruiker' => $user->name,
-            'actie_type' => 'update',
-            'beschrijving' => 'Heeft notificatie-instellingen bijgewerkt',
-        ]);
-
-        return redirect()->back()->with('success', 'Notificatie-instellingen bijgewerkt.');
     }
 
     /**

@@ -25,7 +25,6 @@ Route::get('/', function () {
 });
 
 // Wachtwoord reset routes
-// Wachtwoord reset routes
 Route::get('/wachtwoord-vergeten', function () {
     return Inertia::render('Auth/ForgotPassword');
 })->middleware('guest')->name('password.request');
@@ -103,6 +102,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/password-reset', 'sendPasswordResetLink')->name('password.email');
         Route::put('/notifications', 'updateNotifications')->name('notifications.update');
         Route::delete('/account', 'destroy')->name('destroy');
+        Route::delete('/sessies/{id}', [ProfileController::class, 'beeindigSessie'])->name('profile.session.destroy');
+        Route::delete('/sessies', [ProfileController::class, 'beeindigAlleSessies'])->name('profile.sessions.destroy');
     });
 
     Route::controller(NoteController::class)->name('note')->prefix('notities')->group(function () {

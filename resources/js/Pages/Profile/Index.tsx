@@ -1,7 +1,7 @@
 "use client"
 
 import { Head } from "@inertiajs/react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs"
 import ProfileInformation from "./Components/ProfileInformation"
 import ProfilePhoto from "./Components/ProfilePhoto"
@@ -9,10 +9,25 @@ import PasswordUpdate from "./Components/PasswordUpdate"
 import SecuritySettings from "./Components/SecuritySettings"
 import ActivityLog from "./Components/ActivityLog"
 import AccountDeletion from "./Components/AccountDeletion"
-import AdminLayout from "@/Layouts/AdminLayout"
+import MeosLayout from "@/Layouts/MeosLayout"
 import type { User } from "@/types"
 import type { LogboekItem } from "@/Pages/Admin/Logboek/types"
-import MeosLayout from "@/Layouts/MeosLayout"
+
+interface LoginSession {
+  id: number
+  user_id: number
+  session_id: string | null
+  ip_adres: string
+  user_agent: string | null
+  apparaat_type: string | null
+  browser: string | null
+  locatie: string | null
+  laatste_activiteit: string
+  is_actief: boolean
+  is_huidige_sessie?: boolean
+  created_at: string
+  updated_at: string
+}
 
 interface ProfileProps {
   user: User & {
@@ -20,10 +35,37 @@ interface ProfileProps {
   }
   hasProfilePhoto: boolean
   recenteActiviteiten: LogboekItem[]
+  actieveSessies: LoginSession[]
 }
 
-export default function Profile({ user, hasProfilePhoto, recenteActiviteiten }: ProfileProps) {
-  const [activeTab, setActiveTab] = useState("algemeen")
+export default function Profile({ user, hasProfilePhoto, recenteActiviteiten, actieveSessies }: ProfileProps) {
+  const urlParams = new URLSearchParams(window.location.search)
+  const tabParam = urlParams.get("tab")
+
+  const [activeTab, setActiveTab] = useState(tabParam || "algemeen")
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value)
+
+    const url = new URL(window.location.href)
+    url.searchParams.set("tab", value)
+    window.history.pushState({}, "", url)
+  }
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search)
+      const tab = params.get("tab")
+      if (tab) {
+        setActiveTab(tab)
+      } else {
+        setActiveTab("algemeen")
+      }
+    }
+
+    window.addEventListener("popstate", handlePopState)
+    return () => window.removeEventListener("popstate", handlePopState)
+  }, [])
 
   return (
     <MeosLayout>
@@ -36,7 +78,7 @@ export default function Profile({ user, hasProfilePhoto, recenteActiviteiten }: 
           </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-4">
           <TabsList className="bg-zinc-800 border-zinc-700">
             <TabsTrigger value="algemeen" className="data-[state=active]:bg-blue-500">
               Algemeen
@@ -67,7 +109,7 @@ export default function Profile({ user, hasProfilePhoto, recenteActiviteiten }: 
           </TabsContent>
 
           <TabsContent value="activiteit" className="space-y-4">
-            <ActivityLog activiteiten={recenteActiviteiten} />
+            <ActivityLog activiteiten={recenteActiviteiten} actieveSessies={actieveSessies} />
           </TabsContent>
 
           <TabsContent value="account" className="space-y-4">

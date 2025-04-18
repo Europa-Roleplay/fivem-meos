@@ -1,15 +1,14 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/Components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/Components/ui/card"
 import { Switch } from "@/Components/ui/switch"
 import { Label } from "@/Components/ui/label"
-import { Shield, Smartphone } from "lucide-react"
+import { Shield, Smartphone, ExternalLink } from "lucide-react"
+import { useState } from "react"
 
 export default function SecuritySettings() {
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false)
-  const [sessionManagementEnabled, setSessionManagementEnabled] = useState(false)
 
   return (
     <Card className="bg-zinc-900 border-zinc-800">
@@ -33,19 +32,6 @@ export default function SecuritySettings() {
           />
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="space-y-0.5">
-            <Label className="text-zinc-300">Sessiebeheer</Label>
-            <p className="text-xs text-zinc-500">Beheer en beëindig actieve sessies op andere apparaten</p>
-          </div>
-          <Switch
-            checked={sessionManagementEnabled}
-            onCheckedChange={setSessionManagementEnabled}
-            disabled
-            aria-label="Sessiebeheer"
-          />
-        </div>
-
         <div className="pt-4">
           <Button
             variant="outline"
@@ -59,7 +45,7 @@ export default function SecuritySettings() {
 
         <div className="rounded-md bg-zinc-800 p-4 border border-zinc-700">
           <div className="flex">
-            <Smartphone className="h-5 w-5 text-yellow-500 mr-3 flex-shrink-0" />
+            <Smartphone className="h-5 w-5 text-blue-500 mr-3 flex-shrink-0" />
             <div>
               <h3 className="text-sm font-medium text-zinc-300">Twee-factor authenticatie komt binnenkort</h3>
               <p className="mt-1 text-xs text-zinc-500">

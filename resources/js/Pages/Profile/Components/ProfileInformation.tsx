@@ -45,7 +45,7 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
               onChange={(e) => setData("name", e.target.value)}
               className="bg-zinc-800 border-zinc-700 text-white"
             />
-            {errors.name && <p className="text-blue-500 text-sm">{errors.name}</p>}
+            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
           </div>
 
           <div className="space-y-2">
@@ -59,7 +59,7 @@ export default function ProfileInformation({ user }: ProfileInformationProps) {
               onChange={(e) => setData("email", e.target.value)}
               className="bg-zinc-800 border-zinc-700 text-white"
             />
-            {errors.email && <p className="text-blue-500 text-sm">{errors.email}</p>}
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             <p className="text-xs text-zinc-500">
               Bij het wijzigen van je e-mailadres kan een verificatie e-mail worden verzonden.
             </p>
