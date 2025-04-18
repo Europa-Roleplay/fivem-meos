@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LoginSession;
-use App\Models\User;
-use App\Models\Logboek;
 use App\Mail\PasswordResetMail;
 use App\Models\Logboek;
+use App\Models\Logboek;
+use App\Models\LoginSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -37,8 +36,8 @@ class ProfileController extends Controller
                     'id' => $sessie->id,
                     'gebruiker' => $sessie->user->name ?? 'Onbekend',
                     'actie_type' => $sessie->is_actief ? 'login' : 'logout',
-                    'beschrijving' => $sessie->is_actief 
-                        ? "Ingelogd vanaf {$sessie->apparaat_type} met {$sessie->browser}" 
+                    'beschrijving' => $sessie->is_actief
+                        ? "Ingelogd vanaf {$sessie->apparaat_type} met {$sessie->browser}"
                         : "Uitgelogd vanaf {$sessie->apparaat_type} met {$sessie->browser}",
                     'data' => json_encode([
                         'ip_adres' => $sessie->ip_adres,
@@ -59,7 +58,7 @@ class ProfileController extends Controller
         foreach ($actieveSessies as $sessie) {
             $sessie->is_huidige_sessie = ($sessie->session_id === $huidigeSessionId);
         }
-        
+
         return Inertia::render('Profile/Index', [
             'user' => $user,
             'recenteActiviteiten' => $recenteActiviteiten,
@@ -75,22 +74,22 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $huidigeSessionId = session()->getId();
-        
+
         $sessie = LoginSession::where('id', $id)
             ->where('user_id', $user->id)
             ->first();
-            
-        if (!$sessie) {
+
+        if (! $sessie) {
             return redirect()->back()->with('error', 'Sessie niet gevonden.');
         }
-        
+
         // Controleer of dit de huidige sessie is
         if ($sessie->session_id === $huidigeSessionId) {
             // Log de gebruiker uit
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-            
+
             return redirect('/login')->with('success', 'Je bent uitgelogd.');
         }
 
@@ -99,9 +98,9 @@ class ProfileController extends Controller
         }
 
         $sessie->update([
-            'is_actief' => false
+            'is_actief' => false,
         ]);
-        
+
         return redirect()->back()->with('success', 'Sessie succesvol beëindigd.');
     }
 
@@ -128,7 +127,7 @@ class ProfileController extends Controller
             ->where('is_actief', true)
             ->where('session_id', '!=', $huidigeSessionId)
             ->update(['is_actief' => false]);
-        
+
         return redirect()->back()->with('success', 'Alle andere sessies zijn beëindigd.');
     }
 
@@ -138,23 +137,23 @@ class ProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-        
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
         ]);
 
         $emailChanged = $user->email !== $validated['email'];
-        
+
         $user->name = $validated['name'];
-        
+
         if ($emailChanged) {
             $user->email = $validated['email'];
             // Hier zou je een e-mailverificatie kunnen sturen als dat nodig is
         }
-        
+
         $user->save();
-        
+
         return redirect()->back()->with('success', 'Profielgegevens bijgewerkt.');
     }
 
