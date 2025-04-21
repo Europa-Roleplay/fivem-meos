@@ -24,8 +24,8 @@ class LogboekController extends Controller
         if ($request->has('zoekterm') && $request->zoekterm !== '') {
             $zoekterm = $request->zoekterm;
             $query->where(function ($q) use ($zoekterm) {
-                $q->where('beschrijving', 'like', '%'.$zoekterm.'%')
-                    ->orWhere('gebruiker', 'like', '%'.$zoekterm.'%');
+                $q->where('beschrijving', 'like', '%' . $zoekterm . '%')
+                    ->orWhere('gebruiker', 'like', '%' . $zoekterm . '%');
             });
         }
 
@@ -75,8 +75,8 @@ class LogboekController extends Controller
         if ($request->has('zoekterm') && $request->zoekterm !== '') {
             $zoekterm = $request->zoekterm;
             $query->where(function ($q) use ($zoekterm) {
-                $q->where('beschrijving', 'like', '%'.$zoekterm.'%')
-                    ->orWhere('gebruiker', 'like', '%'.$zoekterm.'%');
+                $q->where('beschrijving', 'like', '%' . $zoekterm . '%')
+                    ->orWhere('gebruiker', 'like', '%' . $zoekterm . '%');
             });
         }
 
@@ -91,10 +91,10 @@ class LogboekController extends Controller
 
         $logboek = $query->get();
 
-        $filename = 'logboek_export_'.date('Y-m-d_His').'.csv';
+        $filename = 'logboek_export_' . date('Y-m-d_His') . '.csv';
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ];
 
         $callback = function () use ($logboek) {

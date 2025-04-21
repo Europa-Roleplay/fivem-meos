@@ -16,7 +16,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! Auth::check() || ! Auth::user()->isAdmin()) {
+        if (!Auth::check() || !Auth::user()->isAdmin()) {
             if ($request->wantsJson()) {
                 return response()->json(['message' => 'Geen toegang tot deze pagina.'], 403);
             }

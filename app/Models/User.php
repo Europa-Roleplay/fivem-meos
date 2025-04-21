@@ -22,6 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'job_grade_id',
+        'profile_photo_path',
+        'settings',
     ];
 
     /**
@@ -44,6 +46,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'settings' => 'array',
         ];
     }
 
@@ -55,6 +58,14 @@ class User extends Authenticatable
     public function officerNotes()
     {
         return $this->hasMany(OfficerNote::class, 'officer_id');
+    }
+
+    /**
+     * De login sessies van deze gebruiker.
+     */
+    public function loginSessions()
+    {
+        return $this->hasMany(LoginSession::class);
     }
 
     /**

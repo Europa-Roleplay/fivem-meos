@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import type { User as Gebruiker } from "@/types";
 import { PropsWithChildren, useState } from "react";
+import type { PageProps } from "@/types"
 
 export default function MeosLayout({ children }: PropsWithChildren) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -122,12 +123,17 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                     <div className="flex items-center gap-4 ml-auto">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    className="flex items-center gap-2 h-8 px-2"
-                                >
-                                    <div className="h-8 w-8 rounded-full bg-white flex items-center justify-center">
-                                        <User className="h-5 w-5" />
+                                <Button variant="ghost" className="flex items-center gap-2 h-8 px-2">
+                                    <div className="h-8 w-8 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
+                                        {user.profile_photo_path ? (
+                                            <img
+                                                src={`/storage/${user.profile_photo_path}`}
+                                                alt={user.name}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        ) : (
+                                            <User className="h-5 w-5 text-white" />
+                                        )}
                                     </div>
                                     <ChevronDown className="h-4 w-4 text-white" />
                                 </Button>
@@ -150,7 +156,7 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem asChild className="text-white">
-                                    <Link href="/uitloggen">Uitloggen</Link>
+                                    <Link href="/log-out">Uitloggen</Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 {isUserAdmin && (
@@ -196,8 +202,8 @@ function NavItem({
         <Link
             href={href}
             className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${active
-                    ? "bg-blue-500 text-white"
-                    : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+                ? "bg-blue-500 text-white"
+                : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
                 }`}
         >
             <div className="flex-shrink-0">{icon}</div>
