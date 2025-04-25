@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\BoeteController;
-use App\Http\Controllers\Admin\LogboekController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CitizenController;
@@ -12,7 +10,6 @@ use App\Http\Controllers\PentalieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrainingController;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -56,7 +53,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/status/{user}', 'status')->name('.status');
             Route::get('/dossier/{user}', 'dossier')->name('.dossier');
         });
-
 
         Route::controller(TrainingController::class)->name('.trainingen')->prefix('specialisaties')->group(function () {
             Route::get(null, 'index');

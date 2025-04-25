@@ -41,6 +41,7 @@ class PentalieController extends Controller
     {
         $penalty = Penaltie::find($id);
         $penalty->delete();
+
         return redirect()->back()->with('success', 'Penaltie succesvol verwijderd.');
     }
 }
