@@ -8,6 +8,7 @@ use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\OfficerNotesController;
+use App\Http\Controllers\PentalieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrainingController;
 use Illuminate\Foundation\Application;
@@ -56,33 +57,24 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/dossier/{user}', 'dossier')->name('.dossier');
         });
 
-        Route::controller(TrainingController::class)->name('.trainingen')->prefix('trainingen')->group(function () {
-            Route::get('/', 'index');
-            Route::post('/', 'store')->name('.store');
-            Route::post('/{training}', 'update')->name('.update');
-            Route::delete('/{training}', 'destroy')->name('.destroy');
-        });
 
-        Route::controller(LogboekController::class)->name('.logboek')->prefix('logboek')->group(function () {
-            Route::get('/', 'index');
-            Route::get('/export', 'export')->name('.export');
-        });
-
-        Route::controller(BoeteController::class)->name('.boetes')->prefix('boetes')->group(function () {
-            Route::get('/', 'index');
-            Route::get('/create', 'create')->name('.create');
-            Route::post('/', 'store')->name('.store');
-            Route::get('/{boete}/edit', 'edit')->name('.edit');
-            Route::put('/{boete}', 'update')->name('.update');
-            Route::delete('/{boete}', 'destroy')->name('.destroy');
-            Route::get('/export', 'export')->name('.export');
-        });
-
-        Route::controller(TrainingController::class)->name('.trainingen')->prefix('trainingen')->group(function () {
+        Route::controller(TrainingController::class)->name('.trainingen')->prefix('specialisaties')->group(function () {
             Route::get(null, 'index');
             Route::post(null, 'store')->name('.store');
             Route::post('/{training}', 'update')->name('.update');
             Route::delete('/{training}', 'destroy')->name('.destroy');
+        });
+
+        Route::controller(OfficerNotesController::class)->name('.officernotes')->prefix('officernotes')->group(function () {
+            Route::post(null, 'store')->name('.store');
+            Route::delete('/{officerNote}', 'destroy')->name('.destroy');
+        });
+
+        Route::controller(PentalieController::class)->name('.penalties')->prefix('straffen')->group(function () {
+            Route::get(null, 'index');
+            Route::post(null, 'store')->name('.store');
+            Route::post('/{pentalie}', 'update')->name('.update');
+            Route::delete('/{pentalie}', 'destroy')->name('.destroy');
         });
     });
 
@@ -123,13 +115,5 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
-
-Route::get('/log-out', function () {
-    if (Auth::check()) {
-        Auth::logout();
-    }
-
-    return redirect('/login')->with('status', 'Je bent succesvol uitgelogd.');
-})->name('logout');
 
 require __DIR__ . '/auth.php';

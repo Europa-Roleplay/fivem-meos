@@ -199,7 +199,7 @@ export default function Dossier({ user }: { user: any }) {
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <div>
                                     <CardTitle className="text-zinc-400">
-                                        Trainingen
+                                        Specialisaties
                                     </CardTitle>
                                     <CardDescription>
                                         Voltooide trainingen en opleidingen
@@ -207,7 +207,7 @@ export default function Dossier({ user }: { user: any }) {
                                 </div>
                                 <Button
                                     size="sm"
-                                // onClick={() => setIsAddTrainingOpen(true)}
+                                    // onClick={() => setIsAddTrainingOpen(true)}
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
                                     Training toevoegen
@@ -228,81 +228,6 @@ export default function Dossier({ user }: { user: any }) {
                                                     <div className="text-sm text-zinc-400">
                                                         {training.date} •{" "}
                                                         {training.instructor}
-                                                    </div>
-                                                </div>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                >
-                                                    <Edit className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                        )
-                                    )} */}
-                                </div>
-                            </CardContent>
-                        </Card>
-
-                        {/* Specializations */}
-                        <Card className="bg-zinc-900 border-zinc-800">
-                            <CardHeader className="flex flex-row items-center justify-between">
-                                <div>
-                                    <CardTitle className="text-zinc-400">
-                                        Specialisaties
-                                    </CardTitle>
-                                    <CardDescription>
-                                        Vaardigheden en expertisegebieden
-                                    </CardDescription>
-                                </div>
-                                <Button
-                                    size="sm"
-                                // onClick={() => setIsAddSpecOpen(true)}
-                                >
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Specialisatie toevoegen
-                                </Button>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-4">
-                                    {/* {user.specializations.map(
-                                        (spec: any, index: number) => (
-                                            <div
-                                                key={index}
-                                                className="flex justify-between items-center p-3 bg-zinc-800/50 rounded-md border border-zinc-800"
-                                            >
-                                                <div>
-                                                    <div className="font-medium">
-                                                        {spec.name}
-                                                    </div>
-                                                    <div className="flex items-center text-sm text-zinc-400">
-                                                        Niveau: {spec.level}
-                                                        <div className="flex ml-2">
-                                                            {[
-                                                                ...Array(
-                                                                    Number.parseInt(
-                                                                        spec.level
-                                                                    )
-                                                                ),
-                                                            ].map((_, i) => (
-                                                                <Star
-                                                                    key={i}
-                                                                    className="h-3 w-3 text-amber-400 fill-amber-400"
-                                                                />
-                                                            ))}
-                                                            {[
-                                                                ...Array(
-                                                                    3 -
-                                                                        Number.parseInt(
-                                                                            spec.level
-                                                                        )
-                                                                ),
-                                                            ].map((_, i) => (
-                                                                <Star
-                                                                    key={i}
-                                                                    className="h-3 w-3 text-zinc-600"
-                                                                />
-                                                            ))}
-                                                        </div>
                                                     </div>
                                                 </div>
                                                 <Button
@@ -643,7 +568,7 @@ export default function Dossier({ user }: { user: any }) {
                                 </div>
                                 <Button
                                     size="sm"
-                                // onClick={() => setIsAddWarningOpen(true)}
+                                    // onClick={() => setIsAddWarningOpen(true)}
                                 >
                                     <Plus className="mr-2 h-4 w-4" />
                                     Waarschuwing toevoegen
@@ -701,13 +626,13 @@ export default function Dossier({ user }: { user: any }) {
                                     id="training-name"
                                     placeholder="Naam van de training"
                                     className="col-span-3 bg-zinc-800 border-zinc-700"
-                                // value={newTraining.name}
-                                // onChange={(e) =>
-                                //     setNewTraining({
-                                //         ...newTraining,
-                                //         name: e.target.value,
-                                //     })
-                                // }
+                                    // value={newTraining.name}
+                                    // onChange={(e) =>
+                                    //     setNewTraining({
+                                    //         ...newTraining,
+                                    //         name: e.target.value,
+                                    //     })
+                                    // }
                                 />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
@@ -721,13 +646,13 @@ export default function Dossier({ user }: { user: any }) {
                                     id="training-date"
                                     type="date"
                                     className="col-span-3 bg-zinc-800 border-zinc-700"
-                                // value={newTraining.date}
-                                // onChange={(e) =>
-                                //     setNewTraining({
-                                //         ...newTraining,
-                                //         date: e.target.value,
-                                //     })
-                                // }
+                                    // value={newTraining.date}
+                                    // onChange={(e) =>
+                                    //     setNewTraining({
+                                    //         ...newTraining,
+                                    //         date: e.target.value,
+                                    //     })
+                                    // }
                                 />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
@@ -741,20 +666,20 @@ export default function Dossier({ user }: { user: any }) {
                                     id="training-instructor"
                                     placeholder="Naam van de instructeur"
                                     className="col-span-3 bg-zinc-800 border-zinc-700"
-                                // value={newTraining.instructor}
-                                // onChange={(e) =>
-                                //     setNewTraining({
-                                //         ...newTraining,
-                                //         instructor: e.target.value,
-                                //     })
-                                // }
+                                    // value={newTraining.instructor}
+                                    // onChange={(e) =>
+                                    //     setNewTraining({
+                                    //         ...newTraining,
+                                    //         instructor: e.target.value,
+                                    //     })
+                                    // }
                                 />
                             </div>
                         </div>
                         <DialogFooter>
                             <Button
                                 variant="outline"
-                            // onClick={() => setIsAddTrainingOpen(false)}
+                                // onClick={() => setIsAddTrainingOpen(false)}
                             >
                                 Annuleren
                             </Button>
@@ -787,13 +712,13 @@ export default function Dossier({ user }: { user: any }) {
                                     id="spec-name"
                                     placeholder="Naam van de specialisatie"
                                     className="col-span-3 bg-zinc-800 border-zinc-700"
-                                // value={newSpec.name}
-                                // onChange={(e) =>
-                                //     setNewSpec({
-                                //         ...newSpec,
-                                //         name: e.target.value,
-                                //     })
-                                // }
+                                    // value={newSpec.name}
+                                    // onChange={(e) =>
+                                    //     setNewSpec({
+                                    //         ...newSpec,
+                                    //         name: e.target.value,
+                                    //     })
+                                    // }
                                 />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
@@ -829,7 +754,7 @@ export default function Dossier({ user }: { user: any }) {
                         <DialogFooter>
                             <Button
                                 variant="outline"
-                            // onClick={() => setIsAddSpecOpen(false)}
+                                // onClick={() => setIsAddSpecOpen(false)}
                             >
                                 Annuleren
                             </Button>
@@ -862,13 +787,13 @@ export default function Dossier({ user }: { user: any }) {
                                     id="warning-reason"
                                     placeholder="Reden voor de waarschuwing"
                                     className="col-span-3 bg-zinc-800 border-zinc-700"
-                                // value={newWarning.reason}
-                                // onChange={(e) =>
-                                //     setNewWarning({
-                                //         ...newWarning,
-                                //         reason: e.target.value,
-                                //     })
-                                // }
+                                    // value={newWarning.reason}
+                                    // onChange={(e) =>
+                                    //     setNewWarning({
+                                    //         ...newWarning,
+                                    //         reason: e.target.value,
+                                    //     })
+                                    // }
                                 />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
@@ -882,13 +807,13 @@ export default function Dossier({ user }: { user: any }) {
                                     id="warning-date"
                                     type="date"
                                     className="col-span-3 bg-zinc-800 border-zinc-700"
-                                // value={newWarning.date}
-                                // onChange={(e) =>
-                                //     setNewWarning({
-                                //         ...newWarning,
-                                //         date: e.target.value,
-                                //     })
-                                // }
+                                    // value={newWarning.date}
+                                    // onChange={(e) =>
+                                    //     setNewWarning({
+                                    //         ...newWarning,
+                                    //         date: e.target.value,
+                                    //     })
+                                    // }
                                 />
                             </div>
                             <div className="grid grid-cols-4 items-center gap-4">
@@ -902,20 +827,20 @@ export default function Dossier({ user }: { user: any }) {
                                     id="warning-issued-by"
                                     placeholder="Naam van de uitgever"
                                     className="col-span-3 bg-zinc-800 border-zinc-700"
-                                // value={newWarning.issuedBy}
-                                // onChange={(e) =>
-                                //     setNewWarning({
-                                //         ...newWarning,
-                                //         issuedBy: e.target.value,
-                                //     })
-                                // }
+                                    // value={newWarning.issuedBy}
+                                    // onChange={(e) =>
+                                    //     setNewWarning({
+                                    //         ...newWarning,
+                                    //         issuedBy: e.target.value,
+                                    //     })
+                                    // }
                                 />
                             </div>
                         </div>
                         <DialogFooter>
                             <Button
                                 variant="outline"
-                            // onClick={() => setIsAddWarningOpen(false)}
+                                // onClick={() => setIsAddWarningOpen(false)}
                             >
                                 Annuleren
                             </Button>

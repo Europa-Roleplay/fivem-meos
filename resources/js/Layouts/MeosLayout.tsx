@@ -30,12 +30,15 @@ import {
 } from "lucide-react";
 import type { User as Gebruiker } from "@/types";
 import { PropsWithChildren, useState } from "react";
-import type { PageProps } from "@/types"
+import type { PageProps } from "@/types";
 
 export default function MeosLayout({ children }: PropsWithChildren) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const pathname = window.location.pathname;
-    const auth = usePage().props.auth as { user: Gebruiker; can?: { admin?: boolean } };
+    const auth = usePage().props.auth as {
+        user: Gebruiker;
+        can?: { admin?: boolean };
+    };
     let isUserAdmin = false;
     if (auth.user && auth.can?.admin) {
         isUserAdmin = auth.can.admin;
@@ -44,8 +47,9 @@ export default function MeosLayout({ children }: PropsWithChildren) {
     return (
         <div className="flex h-screen overflow-hidden">
             <div
-                className={`${sidebarOpen ? "w-64" : "w-20"
-                    } bg-zinc-900 border-r border-zinc-800 transition-all duration-300 flex flex-col`}
+                className={`${
+                    sidebarOpen ? "w-64" : "w-20"
+                } bg-zinc-900 border-r border-zinc-800 transition-all duration-300 flex flex-col`}
             >
                 <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
                     <Link href="/dashboard" className="flex items-center gap-2">
@@ -123,8 +127,11 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                     <div className="flex items-center gap-4 ml-auto">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="flex items-center gap-2 h-8 px-2">
-                                    <div className="h-8 w-8 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
+                                <Button
+                                    variant="ghost"
+                                    className="flex items-center gap-2 h-8 px-2"
+                                >
+                                    {/* <div className="h-8 w-8 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
                                         {user.profile_photo_path ? (
                                             <img
                                                 src={`/storage/${user.profile_photo_path}`}
@@ -134,7 +141,7 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                                         ) : (
                                             <User className="h-5 w-5 text-white" />
                                         )}
-                                    </div>
+                                    </div> */}
                                     <ChevronDown className="h-4 w-4 text-white" />
                                 </Button>
                             </DropdownMenuTrigger>
@@ -146,16 +153,25 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                                     Mijn Account
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild className="text-white">
+                                <DropdownMenuItem
+                                    asChild
+                                    className="text-white"
+                                >
                                     <Link href="/profiel">Profiel</Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem asChild className="text-white">
+                                <DropdownMenuItem
+                                    asChild
+                                    className="text-white"
+                                >
                                     <Link href="/instellingen">
                                         Instellingen
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem asChild className="text-white">
+                                <DropdownMenuItem
+                                    asChild
+                                    className="text-white"
+                                >
                                     <Link href="/log-out">Uitloggen</Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
@@ -164,9 +180,7 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                                         asChild
                                         className="text-white"
                                     >
-                                        <Link href="/admin">
-                                            Admin Paneel
-                                        </Link>
+                                        <Link href="/admin">Admin Paneel</Link>
                                     </DropdownMenuItem>
                                 )}
                             </DropdownMenuContent>
@@ -201,10 +215,11 @@ function NavItem({
     return (
         <Link
             href={href}
-            className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${active
-                ? "bg-blue-500 text-white"
-                : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-                }`}
+            className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${
+                active
+                    ? "bg-blue-500 text-white"
+                    : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+            }`}
         >
             <div className="flex-shrink-0">{icon}</div>
             {expanded && <span>{label}</span>}

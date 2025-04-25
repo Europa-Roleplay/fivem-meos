@@ -166,7 +166,7 @@ export default function Trainingen({ trainingen }: { trainingen: any[] }) {
                                             </Badge>
                                         </TableCell>
                                         <TableCell>
-                                            <div className="flex justify-end gap-2">
+                                            <div className="flex">
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
@@ -174,7 +174,7 @@ export default function Trainingen({ trainingen }: { trainingen: any[] }) {
                                                         openEditDialog(training)
                                                     }
                                                 >
-                                                    <Edit className="h-4 w-4" />
+                                                    <Edit className="h-4 w-4 text-white" />
                                                 </Button>
                                                 <Button
                                                     variant="ghost"
@@ -259,13 +259,13 @@ export default function Trainingen({ trainingen }: { trainingen: any[] }) {
                                     }
                                 >
                                     <SelectTrigger className="w-[180px]">
-                                        <SelectValue placeholder="Selecteer afdeling" />
+                                        <SelectValue
+                                            className="text-white"
+                                            placeholder="Selecteer afdeling"
+                                        />
                                     </SelectTrigger>
-                                    <SelectContent className="text-zinc-400">
-                                        <SelectItem
-                                            value="politie"
-                                            className="text-zinc-400"
-                                        >
+                                    <SelectContent className="text-whit">
+                                        <SelectItem value="politie">
                                             Politie
                                         </SelectItem>
                                         <SelectItem value="kmar">

@@ -294,16 +294,23 @@ export default function Users({
                                         className="hover:bg-zinc-800/50"
                                     >
                                         <td className="p-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="h-8 w-8 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400">
-                                                    {user.name.charAt(0)}
-                                                </div>
-                                                <div>
-                                                    <div className="font-medium text-white">
-                                                        {user.name}
+                                            <Link
+                                                href={route(
+                                                    "admin.users.dossier",
+                                                    user
+                                                )}
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <div className="h-8 w-8 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400">
+                                                        {user.name.charAt(0)}
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-medium text-white">
+                                                            {user.name}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </Link>
                                         </td>
                                         <td className="p-4 text-white">
                                             {user.email}

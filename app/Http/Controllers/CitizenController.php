@@ -58,6 +58,7 @@ class CitizenController extends Controller
 
     public function index()
     {
+        // $this->getCitizens();
         $users = Citizen::paginate(25);
 
         return Inertia::render('Meos/Burger/Index', compact('users'));

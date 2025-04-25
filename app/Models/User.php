@@ -22,8 +22,6 @@ class User extends Authenticatable
         'email',
         'password',
         'job_grade_id',
-        'profile_photo_path',
-        'settings',
     ];
 
     /**
@@ -73,11 +71,12 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return true;
+        if (($this->jobGrade->job === 'politie' && $this->jobGrade->name === 'Eerst Hoofd Commissaris') ||
+            ($this->jobGrade->job === 'kmar' && $this->jobGrade->name === 'Luitenant Kolonel')
+        ) {
+            return true;
+        }
 
-        // Later kun je dit aanpassen om te controleren op basis van rollen of permissies
-        // return $this->hasRole('admin');
-        // of
-        // return $this->hasPermission('admin.access');
+        return false;
     }
 }
