@@ -1,10 +1,13 @@
 import Paginator from "@/assets/Paginator";
+import { ConvictPerson } from "@/Components/ConvictPerson";
 import { Badge } from "@/Components/ui/badge";
+import { Button } from "@/Components/ui/button";
 import { Card } from "@/Components/ui/card";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -30,6 +33,7 @@ import { Link, router, usePage } from "@inertiajs/react";
 import {
     AlertCircle,
     ArrowUpDown,
+    Clipboard,
     Eye,
     MoreHorizontal,
     Search,
@@ -71,12 +75,14 @@ export default function Index() {
         zoeken: "",
     });
 
+    const [open, setOpen] = useState(false);
+
     return (
         <MeosLayout>
             <div className="p-4">
                 {/* Filters */}
-                <div className="border-b border-zinc-800 bg-zinc-900/50 rounded-t-lg mb-4">
-                    <div className="flex items-center p-4 gap-4">
+                <div className="border-b border-zinc-800 bg-zinc-900/50 rounded-t-lg mb-4 flex items-center justify-between">
+                    <div className="flex items-center p-4 gap-4 w-full">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
@@ -97,6 +103,9 @@ export default function Index() {
                                 className="pl-8 bg-zinc-800 text-zinc-400 border-zinc-700 focus:border-blue-500"
                             />
                         </form>
+                    </div>
+                    <div className="p-4">
+                        <ConvictPerson />
                     </div>
                 </div>
 

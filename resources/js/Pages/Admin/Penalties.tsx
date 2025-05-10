@@ -60,6 +60,7 @@ export default function Penalties({
     const handleAddPenalty = () => {
         router.post(route("admin.penalties.store"), newPenalty);
         setIsAddDialogOpen(false);
+        window.location.reload();
     };
 
     const handleEditPenalty = () => {
@@ -82,8 +83,15 @@ export default function Penalties({
     const formatDuration = (amount: number, type: string) => {
         if (type === "celstraf") {
             return `${amount} maanden`;
-        } else {
+        } else if (type === "taakstraf") {
             return `${amount} uur`;
+        } else if (type === "boete") {
+            return `€${amount.toLocaleString("nl-NL", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            })}`;
+        } else {
+            return `${amount}`;
         }
     };
     return (

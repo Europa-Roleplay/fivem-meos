@@ -97,4 +97,11 @@ class CitizenController extends Controller
             $response->status()
         );
     }
+
+    public function getPersons()
+    {
+        $citizens = Citizen::all();
+
+        return response()->json($citizens);
+    }
 }
