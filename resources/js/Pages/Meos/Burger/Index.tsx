@@ -1,17 +1,7 @@
 import Paginator from "@/assets/Paginator";
-import { ConvictPerson } from "@/Components/ConvictPerson";
 import { Badge } from "@/Components/ui/badge";
 import { Button } from "@/Components/ui/button";
 import { Card } from "@/Components/ui/card";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/Components/ui/dialog";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -103,9 +93,6 @@ export default function Index() {
                                 className="pl-8 bg-zinc-800 text-zinc-400 border-zinc-700 focus:border-blue-500"
                             />
                         </form>
-                    </div>
-                    <div className="p-4">
-                        <ConvictPerson />
                     </div>
                 </div>
 

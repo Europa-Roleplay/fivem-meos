@@ -89,27 +89,6 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                             expanded={sidebarOpen}
                         />
                         <NavItem
-                            href={route("admin.trainingen")}
-                            icon={<Book />}
-                            label="Trainingen"
-                            active={pathname?.startsWith("/admin/trainingen")}
-                            expanded={sidebarOpen}
-                        />
-                        <NavItem
-                            href="/boetes"
-                            icon={<CreditCard />}
-                            label="Boetes"
-                            active={pathname?.startsWith("/boetes")}
-                            expanded={sidebarOpen}
-                        />
-                        <NavItem
-                            href="/staffen"
-                            icon={<Gavel />}
-                            label="Staffen"
-                            active={pathname?.startsWith("/straffen")}
-                            expanded={sidebarOpen}
-                        />
-                        <NavItem
                             href="/rapporten"
                             icon={<FileText />}
                             label="Rapporten"
