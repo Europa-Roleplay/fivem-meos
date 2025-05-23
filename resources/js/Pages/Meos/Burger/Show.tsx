@@ -9,7 +9,7 @@ import {
     CardTitle,
 } from "@/Components/ui/card";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from "@/Components/ui/command";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/Components/ui/dialog";
 import { Label } from "@/Components/ui/label";
 import { Separator } from "@/Components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
