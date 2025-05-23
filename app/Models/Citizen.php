@@ -32,6 +32,6 @@ class Citizen extends Model
 
     public function convictions()
     {
-        return $this->hasMany(Conviction::class, 'identifier' , 'identifier');
+        return $this->hasMany(Conviction::class, 'identifier', 'identifier');
     }
 }
