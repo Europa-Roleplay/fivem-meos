@@ -11,7 +11,6 @@ import ActivityLog from "./Components/ActivityLog"
 import AccountDeletion from "./Components/AccountDeletion"
 import MeosLayout from "@/Layouts/MeosLayout"
 import type { User } from "@/types"
-import type { LogboekItem } from "@/Pages/Admin/Logboek/types"
 
 interface LoginSession {
   id: number
@@ -34,11 +33,10 @@ interface ProfileProps {
     profile_photo_path: string | null
   }
   hasProfilePhoto: boolean
-  recenteActiviteiten: LogboekItem[]
   actieveSessies: LoginSession[]
 }
 
-export default function Profile({ user, hasProfilePhoto, recenteActiviteiten, actieveSessies }: ProfileProps) {
+export default function Profile({ user, hasProfilePhoto, actieveSessies }: ProfileProps) {
   const urlParams = new URLSearchParams(window.location.search)
   const tabParam = urlParams.get("tab")
 
@@ -106,10 +104,6 @@ export default function Profile({ user, hasProfilePhoto, recenteActiviteiten, ac
               <PasswordUpdate />
               <SecuritySettings />
             </div>
-          </TabsContent>
-
-          <TabsContent value="activiteit" className="space-y-4">
-            <ActivityLog activiteiten={recenteActiviteiten} actieveSessies={actieveSessies} />
           </TabsContent>
 
           <TabsContent value="account" className="space-y-4">

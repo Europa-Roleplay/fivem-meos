@@ -60,7 +60,6 @@ class ProfileController extends Controller
 
         return Inertia::render('Profile/Index', [
             'user' => $user,
-            'recenteActiviteiten' => $recenteActiviteiten,
             'actieveSessies' => $actieveSessies,
             'hasProfilePhoto' => $user->profile_photo_path !== null,
         ]);
