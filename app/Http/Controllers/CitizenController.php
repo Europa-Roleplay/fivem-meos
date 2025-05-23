@@ -147,7 +147,6 @@ class CitizenController extends Controller
                 $totalCelStraf += $penalty['amount'];
             }
 
-
             ConvictionPunishment::create([
                 'conviction_id' => $conviction->id,
                 'penalty_id' => $penalty['id'],
@@ -177,7 +176,7 @@ class CitizenController extends Controller
                 'playeridentifier' => $data['identifier'],
                 'useridentifier' => Auth::user()->discord_id,
                 'count' => $totalTaskStraf,
-                'reason' => "Straf opgelegd door " . Auth::user()->name,
+                'reason' => 'Straf opgelegd door ' . Auth::user()->name,
             ]);
         } elseif ($totalCelStraf > 0 && $totalTaskStraf === 0) {
             Http::post(env('API_URL') . '/jail', [

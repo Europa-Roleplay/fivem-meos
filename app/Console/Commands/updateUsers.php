@@ -26,7 +26,7 @@ class updateUsers extends Command
      */
     public function handle()
     {
-        $controller = new CitizenController();
+        $controller = new CitizenController;
         $controller->getCitizens();
         $this->info('Users updated successfully.');
     }
