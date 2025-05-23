@@ -74,7 +74,7 @@ export default function Dashboard({
 
     return (
         <AdminLayout>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
                 <StatCard
                     title="Actieve Agenten"
                     value={activePolice}
@@ -91,7 +91,7 @@ export default function Dashboard({
                     change="+3 sinds gisteren"
                     trend="up"
                 />
-                <StatCard
+                {/* <StatCard
                     title="Rapporten Vandaag"
                     value="42"
                     description="12 wachtend op review"
@@ -106,10 +106,10 @@ export default function Dashboard({
                     icon={<AlertTriangle className="h-5 w-5 text-amber-500" />}
                     change="-2 sinds gisteren"
                     trend="down"
-                />
+                /> */}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <Card className="bg-zinc-900 border-zinc-800">
                     <CardHeader>
                         <CardTitle className="text-zinc-400">
@@ -121,9 +121,7 @@ export default function Dashboard({
                     </CardHeader>
                     <CardContent>
                         <div className="h-80 flex items-center justify-center">
-                            {/* Donut chart */}
-
-                            {/* Legend */}
+                            
                         </div>
                     </CardContent>
                 </Card>
@@ -139,13 +137,13 @@ export default function Dashboard({
                     </CardHeader>
                     <CardContent>
                         <div className="h-80 flex flex-col justify-between">
-                            {/* Line chart */}
+                            
                         </div>
                     </CardContent>
                 </Card>
-            </div>
+            </div> */}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                 <Card className="bg-zinc-900 border-zinc-800 lg:col-span-2">
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-md font-medium text-zinc-400">
@@ -244,7 +242,7 @@ export default function Dashboard({
                         </div>
                     </CardContent>
                 </Card>
-            </div>
+            </div> */}
         </AdminLayout>
     );
 }

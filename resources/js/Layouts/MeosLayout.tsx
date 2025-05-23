@@ -88,13 +88,6 @@ export default function MeosLayout({ children }: PropsWithChildren) {
                             active={pathname?.startsWith("/dashboard/burgers")}
                             expanded={sidebarOpen}
                         />
-                        <NavItem
-                            href="/rapporten"
-                            icon={<FileText />}
-                            label="Rapporten"
-                            active={pathname?.startsWith("/rapporten")}
-                            expanded={sidebarOpen}
-                        />
                     </nav>
                 </div>
             </div>

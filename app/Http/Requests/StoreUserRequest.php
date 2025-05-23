@@ -24,6 +24,7 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
+            'discord_id' => 'nullable|string|max:255',
             'password' => 'required|string|min:8',
             'job_grade_id' => 'required|exists:job_grades,id',
         ];

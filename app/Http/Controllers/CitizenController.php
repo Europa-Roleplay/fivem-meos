@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Citizen;
+use App\Models\Conviction;
+use App\Models\ConvictionPunishment;
 use App\Models\JobGrade;
+use App\Models\Penaltie;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
@@ -75,13 +79,15 @@ class CitizenController extends Controller
 
     public function show($id)
     {
-        $user = Citizen::with(['notes' => function ($query) {
-            $query->with('author');
-        }])->findOrFail($id);
+        $user = Citizen::with(['notes.author', 'convictions.convictionPunishments'])->findOrFail($id);
+
         $jobs = JobGrade::all();
+
+        $penalties = Penaltie::all();
+
         $licences = self::getLicense($user->identifier)['licenses'] ?? [];
 
-        return Inertia::render('Meos/Burger/Show', compact('user', 'jobs', 'licences'));
+        return Inertia::render('Meos/Burger/Show', compact('user', 'jobs', 'licences', 'penalties'));
     }
 
     public static function removeLicense($identifier, $type)
@@ -102,5 +108,89 @@ class CitizenController extends Controller
         $citizens = Citizen::all();
 
         return response()->json($citizens);
+    }
+
+    public function updateWantedStatus(Request $request, $identifier)
+    {
+        $citizen = Citizen::where('identifier', $identifier)->firstOrFail();
+        $citizen->update(['wanted' => !$citizen->wanted]);
+
+        return response()->json(['message' => 'Status updated successfully']);
+    }
+
+    public function updateWantedReason(Request $request, $identifier)
+    {
+        $citizen = Citizen::where('identifier', $identifier)->firstOrFail();
+        $citizen->update(['wanted_text' => $request->reason]);
+
+        return response()->json(['message' => 'Wanted reason updated successfully']);
+    }
+
+    public function punish(Request $request)
+    {
+        $data = $request->all();
+
+        $conviction = Conviction::create([
+            'identifier' => $data['identifier'],
+            'handcuff' => $data['handcuff'],
+            'pvb' => $data['pvb'],
+            'search' => $data['search'],
+        ]);
+
+        $totalTaskStraf = 0;
+        $totalCelStraf = 0;
+
+        foreach ($data['penalties'] as $penalty) {
+            if ($penalty['penalty_type'] === 'taakstraf') {
+                $totalTaskStraf += $penalty['amount'];
+            } elseif ($penalty['penalty_type'] === 'celstraf') {
+                $totalCelStraf += $penalty['amount'];
+            }
+
+
+            ConvictionPunishment::create([
+                'conviction_id' => $conviction->id,
+                'penalty_id' => $penalty['id'],
+                'penalty_name' => $penalty['penalty_name'],
+                'penalty_type' => $penalty['penalty_type'],
+                'amount' => $penalty['amount'],
+            ]);
+        }
+
+        // Converteer taakstraf als er ook celstraf is
+        if ($totalCelStraf > 0 && $totalTaskStraf > 0) {
+            $extraCelStraf = intdiv($totalTaskStraf, 5);
+            if ($extraCelStraf > 0) {
+                $totalCelStraf += $extraCelStraf;
+
+                ConvictionPunishment::create([
+                    'conviction_id' => $conviction->id,
+                    'penalty_name' => 'Converted Taskstraffen',
+                    'penalty_type' => 'celstraf',
+                    'amount' => $extraCelStraf,
+                ]);
+            }
+        }
+
+        if ($totalTaskStraf > 0 && $totalCelStraf === 0) {
+            Http::post(env('API_URL') . '/taakstraf', [
+                'playeridentifier' => $data['identifier'],
+                'useridentifier' => Auth::user()->discord_id,
+                'count' => $totalTaskStraf,
+                'reason' => "Straf opgelegd door " . Auth::user()->name,
+            ]);
+        } elseif ($totalCelStraf > 0 && $totalTaskStraf === 0) {
+            Http::post(env('API_URL') . '/jail', [
+                'playeridentifier' => $data['identifier'],
+                'count' => $totalCelStraf,
+            ]);
+        } elseif ($totalCelStraf > 0 && $totalTaskStraf > 0) {
+            Http::post(env('API_URL') . '/jail', [
+                'playeridentifier' => $data['identifier'],
+                'count' => $totalCelStraf,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Straf is succesvol opgelegd.');
     }
 }

@@ -108,6 +108,7 @@ Route::middleware('auth')->group(function () {
             Route::get(null, 'index');
             Route::post('/', 'search')->name('.search');
             Route::get('/{id}', 'show')->name('.show');
+            Route::post('/punish/{id}', 'punish')->name('.punish');
         });
     });
 });

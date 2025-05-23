@@ -56,6 +56,9 @@ export default function Users({
 }) {
     const [open, setOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
+    const [search, setSearch] = useState("");
+
+    const [users, setUsers] = useState(userData);
 
     const {
         data,
@@ -67,6 +70,7 @@ export default function Users({
     } = useForm({
         name: "",
         email: "",
+        discord: "",
         password: "",
         active: true,
         job_grade_id: "",
@@ -127,6 +131,23 @@ export default function Users({
                                             setData("email", e.target.value);
                                         }}
                                         placeholder="email@europaroleplay.com"
+                                        className="col-span-3 bg-zinc-800 border-zinc-700 text-zinc-200"
+                                    />
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label
+                                        htmlFor="discord"
+                                        className="text-right text-zinc-400"
+                                    >
+                                        Discord ID
+                                    </Label>
+                                    <Input
+                                        id="discord"
+                                        type="string"
+                                        onChange={(e) => {
+                                            setData("discord", e.target.value);
+                                        }}
+                                        placeholder="123456789"
                                         className="col-span-3 bg-zinc-800 border-zinc-700 text-zinc-200"
                                     />
                                 </div>
@@ -244,6 +265,19 @@ export default function Users({
                         <div className="relative flex-1 max-w-xl">
                             <Search className="absolute left-2 top-2.5 h-4 w-4 text-zinc-500" />
                             <Input
+                                type="text"
+                                onChange={(e) => {
+                                    setSearch(e.target.value);
+                                    setUsers(
+                                        userData.filter((user) =>
+                                            user.name
+                                                .toLowerCase()
+                                                .includes(
+                                                    e.target.value.toLowerCase()
+                                                )
+                                        )
+                                    );
+                                }}
                                 placeholder="Zoek op naam, email, rol..."
                                 className="pl-8 bg-zinc-800 border-zinc-700 focus:border-blue-500 focus:text-white"
                             />
@@ -288,7 +322,7 @@ export default function Users({
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-zinc-800">
-                                {userData.map((user, i) => (
+                                {users.map((user, i) => (
                                     <tr
                                         key={i}
                                         className="hover:bg-zinc-800/50"
