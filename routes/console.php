@@ -12,4 +12,4 @@ Artisan::command('inspire', function () {
 Schedule::call(function () {
     Artisan::call('updateUsers');
     $this->info('Users updated successfully.');
-})->everyMinute();
+})->everyFifteenMinutes();
