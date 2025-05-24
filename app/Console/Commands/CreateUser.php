@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class CreateUser extends Command
 {
@@ -23,6 +23,7 @@ class CreateUser extends Command
 
         if (User::where('email', $email)->exists()) {
             $this->error("Er bestaat al een gebruiker met het e-mailadres: {$email}");
+
             return 1;
         }
 
@@ -35,6 +36,7 @@ class CreateUser extends Command
         ]);
 
         $this->info("Gebruiker succesvol aangemaakt met ID: {$user->id}");
+
         return 0;
     }
 }
