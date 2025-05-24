@@ -457,7 +457,7 @@ export default function Penalties({
                                                   currentPenalty.penalty_type ===
                                                   "celstraf"
                                                       ? "(maanden)"
-                                                      : "(uren)"
+                                                      : "(minuten)"
                                               }`}
                                     </Label>
                                     <Input
