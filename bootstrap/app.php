@@ -22,5 +22,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->reportable(function (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Onbehandelde uitzondering: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        });
     })->create();

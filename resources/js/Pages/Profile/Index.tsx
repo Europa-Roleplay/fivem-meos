@@ -84,9 +84,6 @@ export default function Profile({ user, hasProfilePhoto, actieveSessies }: Profi
             <TabsTrigger value="beveiliging" className="data-[state=active]:bg-blue-500">
               Beveiliging
             </TabsTrigger>
-            <TabsTrigger value="activiteit" className="data-[state=active]:bg-blue-500">
-              Activiteit
-            </TabsTrigger>
             <TabsTrigger value="account" className="data-[state=active]:bg-blue-500">
               Account
             </TabsTrigger>
