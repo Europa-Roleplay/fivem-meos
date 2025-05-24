@@ -132,7 +132,6 @@ export default function AdminLayout({ children }: PropsWithChildren) {
 
             {/* Main content */}
             <div className="flex-1 flex flex-col overflow-hidden">
-                {/* Header */}
                 <header className="h-16 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between px-4">
                     <div className="flex items-center gap-4 ml-auto">
                         <DropdownMenu>
@@ -141,6 +140,16 @@ export default function AdminLayout({ children }: PropsWithChildren) {
                                     variant="ghost"
                                     className="flex items-center gap-2 h-8 px-2"
                                 >
+                                    {user.profile_photo_path ? (
+                                        <img
+                                            src={`/storage/${user.profile_photo_path}`}
+                                            alt="Profielfoto"
+                                            className="w-6 h-6 rounded-full object-cover"
+                                        />
+                                    ) : (
+                                        // Vervang dit eventueel door een echte icon component van Inertia of je eigen
+                                        <User className="w-5 h-5 text-white" />
+                                    )}
                                     <ChevronDown className="h-4 w-4 text-white" />
                                 </Button>
                             </DropdownMenuTrigger>
