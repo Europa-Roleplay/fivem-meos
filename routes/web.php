@@ -9,7 +9,6 @@ use App\Http\Controllers\OfficerNotesController;
 use App\Http\Controllers\PentalieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TrainingController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
